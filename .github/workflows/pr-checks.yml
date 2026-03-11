@@ -76,7 +76,7 @@ jobs:
         run: npm run codegen
 
       - name: Run Storybook tests
-        run: npm run test:storybook --workspace postgres-backup-frontend
+        run: npm run test:storybook --workspace webapp-template-frontend
 
   e2e:
     name: E2E

@@ -25,8 +25,8 @@ Most relevant docs for frontend GraphQL integration:
 ## Storybook
 
 - Start Storybook:
-  `npm run storybook --workspace postgres-backup-frontend`
+  `npm run storybook --workspace webapp-template-frontend`
 - Build static Storybook:
-  `npm run build-storybook --workspace postgres-backup-frontend`
+  `npm run build-storybook --workspace webapp-template-frontend`
 
 Story files are colocated under `packages/frontend/src/**` next to their related modules.

@@ -12,8 +12,8 @@ RUN npm ci
 FROM deps AS build
 COPY . .
 RUN npm run codegen \
-  && npm run compile --workspace postgres-backup-backend \
-  && npm run build --workspace postgres-backup-frontend
+  && npm run compile --workspace webapp-template-backend \
+  && npm run build --workspace webapp-template-frontend
 
 FROM base AS prod-deps
 COPY package.json package-lock.json ./

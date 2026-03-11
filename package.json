@@ -1,5 +1,5 @@
 {
-  "name": "postgres-backups",
+  "name": "webapp-template",
   "version": "1.0.0",
   "private": true,
   "type": "module",
@@ -9,10 +9,10 @@
   },
   "scripts": {
     "test": "npm run test:unit",
-    "test:unit": "npm run generate && npm run test:unit --workspace postgres-backup-backend && npm run test:unit --workspace postgres-backup-frontend",
-    "test:unit:coverage": "npm run generate && npm run test:unit:coverage --workspace postgres-backup-backend && npm run test:unit:coverage --workspace postgres-backup-frontend",
+    "test:unit": "npm run generate && npm run test:unit --workspace webapp-template-backend && npm run test:unit --workspace webapp-template-frontend",
+    "test:unit:coverage": "npm run generate && npm run test:unit:coverage --workspace webapp-template-backend && npm run test:unit:coverage --workspace webapp-template-frontend",
     "codegen:gql": "graphql-codegen --config codegen.ts",
-    "codegen:routes": "npm run routes:generate --workspace postgres-backup-frontend",
+    "codegen:routes": "npm run routes:generate --workspace webapp-template-frontend",
     "codegen": "npm run codegen:gql",
     "generate": "npm run codegen:gql && npm run codegen:routes",
     "codegen:watch": "npm run codegen:gql -- --watch",
@@ -21,12 +21,12 @@
     "e2e:headed": "npm run generate && playwright test --headed",
     "e2e:debug": "npm run generate && playwright test --debug",
     "e2e:install": "playwright install --with-deps",
-    "e2e:frontend-server": "npm run generate && npm run dev:e2e --workspace postgres-backup-frontend",
-    "typecheck": "npm run generate && npm run compile --workspace postgres-backup-backend && npm run typecheck:test --workspace postgres-backup-backend && npm run typecheck --workspace postgres-backup-frontend",
+    "e2e:frontend-server": "npm run generate && npm run dev:e2e --workspace webapp-template-frontend",
+    "typecheck": "npm run generate && npm run compile --workspace webapp-template-backend && npm run typecheck:test --workspace webapp-template-backend && npm run typecheck --workspace webapp-template-frontend",
     "lint": "npm run typecheck && eslint",
     "fix": "eslint --fix",
-    "dev": "npm run generate && concurrently -k -n codegen,backend,frontend \"npm run codegen:watch\" \"npm run dev --workspace postgres-backup-backend\" \"npm run dev --workspace postgres-backup-frontend\"",
-    "dev:all": "npm run generate && concurrently -k -n codegen,backend,frontend,storybook \"npm run codegen:watch\" \"npm run dev --workspace postgres-backup-backend\" \"npm run dev --workspace postgres-backup-frontend\" \"npm run storybook --workspace postgres-backup-frontend\""
+    "dev": "npm run generate && concurrently -k -n codegen,backend,frontend \"npm run codegen:watch\" \"npm run dev --workspace webapp-template-backend\" \"npm run dev --workspace webapp-template-frontend\"",
+    "dev:all": "npm run generate && concurrently -k -n codegen,backend,frontend,storybook \"npm run codegen:watch\" \"npm run dev --workspace webapp-template-backend\" \"npm run dev --workspace webapp-template-frontend\" \"npm run storybook --workspace webapp-template-frontend\""
   },
   "workspaces": [
     "packages/*"

@@ -1,5 +1,5 @@
 {
-  "name": "postgres-backup-backend",
+  "name": "webapp-template-backend",
   "private": true,
   "version": "1.0.0",
   "type": "module",

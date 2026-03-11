@@ -3,13 +3,13 @@
 ## 1) Build the image locally
 
 ```bash
-docker build -t <dockerhub-username>/postgres-backups:latest .
+docker build -t <dockerhub-username>/webapp-template:latest .
 ```
 
 ## 2) Run locally
 
 ```bash
-docker run --rm -p 4000:4000 <dockerhub-username>/postgres-backups:latest
+docker run --rm -p 4000:4000 <dockerhub-username>/webapp-template:latest
 ```
 
 The app will be available at:
@@ -26,14 +26,14 @@ docker login
 ## 4) Push image
 
 ```bash
-docker push <dockerhub-username>/postgres-backups:latest
+docker push <dockerhub-username>/webapp-template:latest
 ```
 
 ## 5) Optional versioned tag
 
 ```bash
-docker tag <dockerhub-username>/postgres-backups:latest <dockerhub-username>/postgres-backups:v1
-docker push <dockerhub-username>/postgres-backups:v1
+docker tag <dockerhub-username>/webapp-template:latest <dockerhub-username>/webapp-template:v1
+docker push <dockerhub-username>/webapp-template:v1
 ```
 
 ## Notes

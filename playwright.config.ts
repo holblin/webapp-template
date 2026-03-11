@@ -23,7 +23,7 @@ export default defineConfig({
   },
   webServer: [
     {
-      command: 'npm run dev:e2e --workspace postgres-backup-backend',
+      command: 'npm run dev:e2e --workspace webapp-template-backend',
       url: 'http://127.0.0.1:4000/graphql',
       reuseExistingServer: !isCI,
       timeout: 120_000,

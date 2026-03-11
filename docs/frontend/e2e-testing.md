@@ -24,7 +24,7 @@ This repository uses Playwright for end-to-end tests.
 
 Playwright starts:
 
-1. backend server (`npm run dev:e2e --workspace postgres-backup-backend`)
+1. backend server (`npm run dev:e2e --workspace webapp-template-backend`)
 2. frontend server (`npm run e2e:frontend-server`)
 
 The frontend E2E server script runs codegen first, then starts Vite on `127.0.0.1:4080`.
