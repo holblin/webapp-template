@@ -75,6 +75,9 @@ jobs:
       - name: Generate GraphQL code
         run: npm run codegen
 
+      - name: Install Playwright browsers and system deps
+        run: npx playwright install --with-deps chromium
+
       - name: Run Storybook tests
         run: npm run test:storybook --workspace webapp-template-frontend
 

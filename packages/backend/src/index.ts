@@ -55,19 +55,22 @@ const candidateFrontendDistPaths = [
   resolve(backendDir, '../../../frontend/dist'),
 ];
 const frontendDistPath = candidateFrontendDistPaths.find((candidatePath) => existsSync(candidatePath));
-if (!frontendDistPath) {
+const allowMissingFrontendDist = process.env.ALLOW_MISSING_FRONTEND_DIST === 'true';
+if (!frontendDistPath && !allowMissingFrontendDist) {
   throw new Error('Frontend dist directory not found. Build the frontend before starting the backend.');
 }
 
-app.use(express.static(frontendDistPath));
-app.use((request, response, next) => {
-  if (request.path.startsWith('/graphql')) {
-    next();
-    return;
-  }
+if (frontendDistPath) {
+  app.use(express.static(frontendDistPath));
+  app.use((request, response, next) => {
+    if (request.path.startsWith('/graphql')) {
+      next();
+      return;
+    }
 
-  response.sendFile(join(frontendDistPath, 'index.html'));
-});
+    response.sendFile(join(frontendDistPath, 'index.html'));
+  });
+}
 
 const port = Number.parseInt(process.env.PORT ?? '4000', 10);
 await new Promise<void>((resolve) =>
