@@ -4,11 +4,13 @@ import type { PropsWithChildren } from 'react';
 const routerMocks = vi.hoisted(() => ({
   createRootRouteMock: vi.fn((config: Record<string, unknown>) => config),
   createFileRouteMock: vi.fn(() => (config: Record<string, unknown>) => config),
+  stripSearchParamsMock: vi.fn((value: unknown) => value),
 }));
 
 vi.mock('@tanstack/react-router', () => ({
   createRootRoute: routerMocks.createRootRouteMock,
   createFileRoute: routerMocks.createFileRouteMock,
+  stripSearchParams: routerMocks.stripSearchParamsMock,
   Outlet: () => null,
 }));
 

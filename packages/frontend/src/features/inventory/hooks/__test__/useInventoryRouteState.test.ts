@@ -15,7 +15,13 @@ describe('useInventoryRouteState', () => {
       useNavigate: () => navigate,
     };
 
-    const { searchState, onStateChange } = useInventoryRouteState(routeApi);
+    const defaultState = {
+      offset: 0,
+      limit: 20,
+      search: '',
+    };
+
+    const { searchState, onStateChange } = useInventoryRouteState(routeApi, defaultState);
     expect(searchState).toBe(state);
 
     const nextState = {
@@ -25,6 +31,30 @@ describe('useInventoryRouteState', () => {
     };
 
     onStateChange(nextState);
-    expect(navigate).toHaveBeenCalledWith({ search: nextState, replace: true });
+    expect(navigate).toHaveBeenCalledWith({
+      search: {
+        search: 'author',
+      },
+      replace: true,
+    });
+  });
+
+  it('does not navigate when next state is unchanged', () => {
+    const navigate = vi.fn();
+    const state = {
+      offset: 0,
+      limit: 20,
+      search: '',
+    };
+
+    const routeApi: InventoryRouteApi<typeof state> = {
+      useSearch: () => state,
+      useNavigate: () => navigate,
+    };
+
+    const { onStateChange } = useInventoryRouteState(routeApi, state);
+    onStateChange({ ...state });
+
+    expect(navigate).not.toHaveBeenCalled();
   });
 });

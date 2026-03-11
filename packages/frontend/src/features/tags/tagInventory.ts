@@ -41,6 +41,37 @@ export const getTagFilters = (state: TagPageSearch): TagFilters => ({
   filterBookId: state.filterBookId,
 });
 
+export const clearTagFiltersPatch: Partial<TagPageSearch> = {
+  filterNameContains: defaultTagPageSearch.filterNameContains,
+  filterBookId: defaultTagPageSearch.filterBookId,
+};
+
+export const getTagActiveFilters = (
+  state: TagPageSearch,
+  books: Array<{ id: string; title: string }>,
+): Array<{ id: string; label: string; patch: Partial<TagPageSearch> }> => {
+  const bookTitleById = new Map(books.map((book) => [book.id, book.title]));
+  const activeFilters: Array<{ id: string; label: string; patch: Partial<TagPageSearch> }> = [];
+
+  if (state.filterNameContains.trim()) {
+    activeFilters.push({
+      id: 'filterNameContains',
+      label: `Name: ${state.filterNameContains.trim()}`,
+      patch: { filterNameContains: defaultTagPageSearch.filterNameContains },
+    });
+  }
+
+  if (state.filterBookId) {
+    activeFilters.push({
+      id: 'filterBookId',
+      label: `Book: ${bookTitleById.get(state.filterBookId) ?? state.filterBookId}`,
+      patch: { filterBookId: defaultTagPageSearch.filterBookId },
+    });
+  }
+
+  return activeFilters;
+};
+
 export const toTagsQueryVariables = (state: TagPageSearch): TagsPageQueryQueryVariables => ({
   offset: state.offset,
   limit: state.limit,

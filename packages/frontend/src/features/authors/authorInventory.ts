@@ -87,6 +87,110 @@ export const getAuthorFilters = (state: AuthorPageSearch): AuthorFilters => ({
   filterMinAverageBookRating: state.filterMinAverageBookRating,
 });
 
+export const clearAuthorFiltersPatch: Partial<AuthorPageSearch> = {
+  filterNameContains: defaultAuthorPageSearch.filterNameContains,
+  filterCountry: defaultAuthorPageSearch.filterCountry,
+  filterIsActive: defaultAuthorPageSearch.filterIsActive,
+  filterBirthDateFrom: defaultAuthorPageSearch.filterBirthDateFrom,
+  filterBirthDateTo: defaultAuthorPageSearch.filterBirthDateTo,
+  filterHasBookTagId: defaultAuthorPageSearch.filterHasBookTagId,
+  filterHasBookGenre: defaultAuthorPageSearch.filterHasBookGenre,
+  filterMinBookCount: defaultAuthorPageSearch.filterMinBookCount,
+  filterPublishedAfterYear: defaultAuthorPageSearch.filterPublishedAfterYear,
+  filterMinAverageBookRating: defaultAuthorPageSearch.filterMinAverageBookRating,
+};
+
+export const getAuthorActiveFilters = (
+  state: AuthorPageSearch,
+  tags: Array<{ id: string; name: string }>,
+): Array<{ id: string; label: string; patch: Partial<AuthorPageSearch> }> => {
+  const tagNameById = new Map(tags.map((tag) => [tag.id, tag.name]));
+  const activeFilters: Array<{ id: string; label: string; patch: Partial<AuthorPageSearch> }> = [];
+
+  if (state.filterNameContains.trim()) {
+    activeFilters.push({
+      id: 'filterNameContains',
+      label: `Name: ${state.filterNameContains.trim()}`,
+      patch: { filterNameContains: defaultAuthorPageSearch.filterNameContains },
+    });
+  }
+
+  if (state.filterCountry) {
+    activeFilters.push({
+      id: 'filterCountry',
+      label: `Country: ${state.filterCountry}`,
+      patch: { filterCountry: defaultAuthorPageSearch.filterCountry },
+    });
+  }
+
+  if (state.filterIsActive !== defaultAuthorPageSearch.filterIsActive) {
+    activeFilters.push({
+      id: 'filterIsActive',
+      label: state.filterIsActive === 'active' ? 'Status: Active' : 'Status: Inactive',
+      patch: { filterIsActive: defaultAuthorPageSearch.filterIsActive },
+    });
+  }
+
+  if (state.filterBirthDateFrom) {
+    activeFilters.push({
+      id: 'filterBirthDateFrom',
+      label: `Born after: ${state.filterBirthDateFrom}`,
+      patch: { filterBirthDateFrom: defaultAuthorPageSearch.filterBirthDateFrom },
+    });
+  }
+
+  if (state.filterBirthDateTo) {
+    activeFilters.push({
+      id: 'filterBirthDateTo',
+      label: `Born before: ${state.filterBirthDateTo}`,
+      patch: { filterBirthDateTo: defaultAuthorPageSearch.filterBirthDateTo },
+    });
+  }
+
+  if (state.filterHasBookTagId) {
+    const resolvedTagName = tagNameById.get(state.filterHasBookTagId) ?? state.filterHasBookTagId;
+    activeFilters.push({
+      id: 'filterHasBookTagId',
+      label: `Book tag: ${resolvedTagName}`,
+      patch: { filterHasBookTagId: defaultAuthorPageSearch.filterHasBookTagId },
+    });
+  }
+
+  if (state.filterHasBookGenre) {
+    activeFilters.push({
+      id: 'filterHasBookGenre',
+      label: `Genre: ${state.filterHasBookGenre}`,
+      patch: { filterHasBookGenre: defaultAuthorPageSearch.filterHasBookGenre },
+    });
+  }
+
+  if (state.filterMinBookCount > defaultAuthorPageSearch.filterMinBookCount) {
+    activeFilters.push({
+      id: 'filterMinBookCount',
+      label: `Min books: ${state.filterMinBookCount}`,
+      patch: { filterMinBookCount: defaultAuthorPageSearch.filterMinBookCount },
+    });
+  }
+
+  if (state.filterPublishedAfterYear > defaultAuthorPageSearch.filterPublishedAfterYear) {
+    activeFilters.push({
+      id: 'filterPublishedAfterYear',
+      label: `Published after: ${state.filterPublishedAfterYear}`,
+      patch: { filterPublishedAfterYear: defaultAuthorPageSearch.filterPublishedAfterYear },
+    });
+  }
+
+  if (state.filterMinAverageBookRating > defaultAuthorPageSearch.filterMinAverageBookRating) {
+    activeFilters.push({
+      id: 'filterMinAverageBookRating',
+      label: `Min rating: ${state.filterMinAverageBookRating}`,
+      patch: { filterMinAverageBookRating: defaultAuthorPageSearch.filterMinAverageBookRating },
+    });
+  }
+
+  return activeFilters;
+};
+
 export const toAuthorsQueryVariables = (state: AuthorPageSearch): AuthorsPageQueryQueryVariables => ({
   offset: state.offset,
   limit: state.limit,

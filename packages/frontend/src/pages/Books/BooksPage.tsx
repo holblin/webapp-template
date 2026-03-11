@@ -8,6 +8,9 @@ import {
 } from 'src/__generated__/gql/graphql';
 import { InventoryCrudLayout } from 'src/components/Inventory/InventoryCrudLayout';
 import {
+  clearBookFiltersPatch,
+  defaultBookPageSearch,
+  getBookActiveFilters,
   getBookFilters,
   toBooksQueryVariables,
   type BookFilters,
@@ -46,6 +49,7 @@ export const BooksPage = () => {
     BooksPageQueryQuery['bookList']['edges'][number]
   >({
     routeApi: booksRouteApi,
+    defaultSearchState: defaultBookPageSearch,
     toVariables: toBooksQueryVariables,
     query: BOOKS_PAGE_QUERY,
     getConnection: (data) => data?.bookList,
@@ -74,6 +78,8 @@ export const BooksPage = () => {
       getRowId={(row) => row.cursor}
       ariaLabel="Books table"
       getFilters={getBookFilters}
+      getActiveFilters={(state) => getBookActiveFilters(state, { authors, tags })}
+      clearFiltersPatch={clearBookFiltersPatch}
       renderFilterPanel={(filters, onFiltersChange) => (
         <BookFiltersPanel
           filters={filters}

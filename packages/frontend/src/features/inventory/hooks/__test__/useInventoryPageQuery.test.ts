@@ -62,6 +62,7 @@ describe('useInventoryPageQuery', () => {
 
     const result = useInventoryPageQuery<TestSearch, TestVariables, TestConnection, TestEdge>({
       routeApi: {} as never,
+      defaultSearchState: { offset: 0, limit: 20, search: '' },
       toVariables: () => queryVariables,
       query: {} as never,
       getConnection: (data: unknown) => data as never,
@@ -96,6 +97,7 @@ describe('useInventoryPageQuery', () => {
 
     useInventoryPageQuery<TestSearch, TestVariables, TestConnection, TestEdge>({
       routeApi: {} as never,
+      defaultSearchState: { offset: 0, limit: 20, search: '' },
       toVariables: (state) => ({ ...state, after: undefined }),
       query: {} as never,
       getConnection: (data: unknown) => data as never,

@@ -2,6 +2,7 @@ import {
   ActionButton,
   Cell,
   Column,
+  Divider,
   Row,
   SearchField,
   TableBody,
@@ -39,6 +40,12 @@ export type InventoryLayoutProps<TRow extends object, TState extends InventoryLa
   getRowId: (row: TRow) => string;
   ariaLabel: string;
   getFilters: (state: TState) => TFilters;
+  getActiveFilters?: (state: TState, filters: TFilters) => Array<{
+    id: string;
+    label: string;
+    patch: Partial<TState>;
+  }>;
+  clearFiltersPatch?: Partial<TState>;
   renderFilterPanel: (filters: TFilters, onFiltersChange: (patch: Partial<TFilters>) => void) => ReactNode;
   loadingState?: 'loading' | 'loadingMore' | 'sorting' | 'filtering' | 'idle';
   onLoadMore?: () => void;
@@ -65,6 +72,8 @@ export const InventoryLayout = <
   getRowId,
   ariaLabel,
   getFilters,
+  getActiveFilters,
+  clearFiltersPatch,
   renderFilterPanel,
   loadingState = 'idle',
   onLoadMore,
@@ -82,6 +91,7 @@ export const InventoryLayout = <
   };
 
   const filters = getFilters(state);
+  const activeFilters = getActiveFilters ? getActiveFilters(state, filters) : [];
 
   return (
     <div
@@ -111,6 +121,33 @@ export const InventoryLayout = <
         </div>
         {topRight}
       </div>
+      {activeFilters.length > 0 ? (
+        <div
+          className={style({
+            display: 'flex',
+            alignItems: 'center',
+            gap: 8,
+            flexWrap: 'wrap',
+          })}
+        >
+          {activeFilters.map((activeFilter) => (
+            <ActionButton
+              key={activeFilter.id}
+              onPress={() => onStatePatch(activeFilter.patch, true)}
+            >
+              {activeFilter.label} ✕
+            </ActionButton>
+          ))}
+          {clearFiltersPatch ? (
+            <>
+              <Divider orientation="vertical" />
+              <ActionButton onPress={() => onStatePatch(clearFiltersPatch, true)}>
+                Clear all
+              </ActionButton>
+            </>
+          ) : null}
+        </div>
+      ) : null}
       <div className={style({ display: 'flex', gap: 12, flexGrow: 1, minHeight: 0 })}>
         {state.showFilters ? (
           <div

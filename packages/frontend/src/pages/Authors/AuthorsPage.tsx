@@ -8,6 +8,9 @@ import {
 } from 'src/__generated__/gql/graphql';
 import { InventoryCrudLayout } from 'src/components/Inventory/InventoryCrudLayout';
 import {
+  clearAuthorFiltersPatch,
+  defaultAuthorPageSearch,
+  getAuthorActiveFilters,
   getAuthorFilters,
   toAuthorsQueryVariables,
   type AuthorFilters,
@@ -45,6 +48,7 @@ export const AuthorsPage = () => {
     AuthorsPageQueryQuery['authorList']['edges'][number]
   >({
     routeApi: authorsRouteApi,
+    defaultSearchState: defaultAuthorPageSearch,
     toVariables: toAuthorsQueryVariables,
     query: AUTHORS_PAGE_QUERY,
     getConnection: (data) => data?.authorList,
@@ -72,6 +76,8 @@ export const AuthorsPage = () => {
       getRowId={(row) => row.cursor}
       ariaLabel="Authors table"
       getFilters={getAuthorFilters}
+      getActiveFilters={(state) => getAuthorActiveFilters(state, tags)}
+      clearFiltersPatch={clearAuthorFiltersPatch}
       renderFilterPanel={(filters, onFiltersChange) => (
         <AuthorFiltersPanel
           filters={filters}

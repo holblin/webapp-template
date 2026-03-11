@@ -17,6 +17,9 @@ import {
   TAGS_PAGE_QUERY,
 } from 'src/features/tags/queries/tagsPage.graphql';
 import {
+  clearTagFiltersPatch,
+  defaultTagPageSearch,
+  getTagActiveFilters,
   getTagFilters,
   toTagsQueryVariables,
   type TagFilters,
@@ -52,6 +55,7 @@ export const TagsPage = () => {
     TagsPageQueryQuery['tagList']['edges'][number]
   >({
     routeApi: tagsRouteApi,
+    defaultSearchState: defaultTagPageSearch,
     toVariables: toTagsQueryVariables,
     query: TAGS_PAGE_QUERY,
     getConnection: (data) => data?.tagList,
@@ -79,6 +83,8 @@ export const TagsPage = () => {
       getRowId={(row) => row.cursor}
       ariaLabel="Tags table"
       getFilters={getTagFilters}
+      getActiveFilters={(state) => getTagActiveFilters(state, books)}
+      clearFiltersPatch={clearTagFiltersPatch}
       renderFilterPanel={(filters, onFiltersChange) => (
         <TagFiltersPanel
           filters={filters}

@@ -44,6 +44,8 @@ export const InventoryCrudLayout = <
   getRowId,
   ariaLabel,
   getFilters,
+  getActiveFilters,
+  clearFiltersPatch,
   renderFilterPanel,
   loadingState = 'idle',
   onLoadMore,
@@ -91,6 +93,8 @@ export const InventoryCrudLayout = <
         getRowId={getRowId}
         ariaLabel={ariaLabel}
         getFilters={getFilters}
+        getActiveFilters={getActiveFilters}
+        clearFiltersPatch={clearFiltersPatch}
         renderFilterPanel={renderFilterPanel}
         loadingState={loadingState}
         onLoadMore={onLoadMore}

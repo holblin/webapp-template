@@ -1,10 +1,13 @@
-import { createFileRoute } from '@tanstack/react-router'
+import { createFileRoute, stripSearchParams } from '@tanstack/react-router'
 import { BookListSortBy, SortDirection } from 'src/__generated__/gql/graphql'
 import { defaultBookPageSearch, type BookPageSearch, type BookSortBy } from 'src/features/books/bookInventory'
 import { parseBoolean, parseEnum, parsePositiveInt, parseString } from 'src/features/inventory/searchParams'
 import { BooksPage } from 'src/pages/Books/BooksPage'
 
 export const Route = createFileRoute('/books')({
+  search: {
+    middlewares: [stripSearchParams(defaultBookPageSearch) as never],
+  },
   validateSearch: (search): BookPageSearch => ({
     offset: parsePositiveInt(search.offset, defaultBookPageSearch.offset),
     limit: parsePositiveInt(search.limit, defaultBookPageSearch.limit),

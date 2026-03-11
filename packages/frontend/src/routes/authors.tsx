@@ -1,10 +1,13 @@
-import { createFileRoute } from '@tanstack/react-router'
+import { createFileRoute, stripSearchParams } from '@tanstack/react-router'
 import { AuthorCountry, AuthorListSortBy, SortDirection } from 'src/__generated__/gql/graphql'
 import { defaultAuthorPageSearch, type AuthorPageSearch, type AuthorSortBy } from 'src/features/authors/authorInventory'
 import { parseBoolean, parseEnum, parseNumber, parsePositiveInt, parseString } from 'src/features/inventory/searchParams'
 import { AuthorsPage } from 'src/pages/Authors/AuthorsPage'
 
 export const Route = createFileRoute('/authors')({
+  search: {
+    middlewares: [stripSearchParams(defaultAuthorPageSearch) as never],
+  },
   validateSearch: (search): AuthorPageSearch => ({
     offset: parsePositiveInt(search.offset, defaultAuthorPageSearch.offset),
     limit: parsePositiveInt(search.limit, defaultAuthorPageSearch.limit),

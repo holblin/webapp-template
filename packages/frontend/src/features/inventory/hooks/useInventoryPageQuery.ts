@@ -20,29 +20,31 @@ type InventoryCursorNodeEdge<TNode = unknown> = {
 };
 
 type UseInventoryPageQueryParams<
-  TSearch,
+  TSearch extends Record<string, unknown>,
   TVariables extends OperationVariables & { after?: string | null | undefined },
   TData,
   TEdge extends InventoryCursorNodeEdge,
 > = {
   routeApi: InventoryRouteApi<TSearch>;
+  defaultSearchState: TSearch;
   toVariables: (searchState: TSearch) => TVariables;
   query: TypedDocumentNode<TData, TVariables>;
   getConnection: (data: TData | undefined) => InventoryConnectionSource<TEdge> | null | undefined;
 };
 
 export const useInventoryPageQuery = <
-  TSearch,
+  TSearch extends Record<string, unknown>,
   TVariables extends OperationVariables & { after?: string | null | undefined } = OperationVariables & { after?: string | null | undefined },
   TData = unknown,
   TEdge extends InventoryCursorNodeEdge = InventoryCursorNodeEdge,
 >({
   routeApi,
+  defaultSearchState,
   toVariables,
   query,
   getConnection,
 }: UseInventoryPageQueryParams<TSearch, TVariables, TData, TEdge>) => {
-  const { searchState, onStateChange } = useInventoryRouteState(routeApi);
+  const { searchState, onStateChange } = useInventoryRouteState(routeApi, defaultSearchState);
   const variables = useMemo(() => toVariables(searchState), [searchState, toVariables]);
 
   const queryState = useInventoryConnectionQuery({
