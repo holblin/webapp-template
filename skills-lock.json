@@ -1,0 +1,40 @@
+{
+  "version": 1,
+  "skills": {
+    "apollo-client": {
+      "source": "apollographql/skills",
+      "sourceType": "github",
+      "computedHash": "ae82ac8ee2b1de548a83ebee3c470391aa11ba2948ccd79448b9c9101384016e"
+    },
+    "apollo-server": {
+      "source": "apollographql/skills",
+      "sourceType": "github",
+      "computedHash": "48e0099a2515d5c3b905f5c3891e8d5291a3466d194524b5a8b49e56e0689533"
+    },
+    "express-backend-starter": {
+      "source": "codewithhashim/express-backend-starter-skill",
+      "sourceType": "github",
+      "computedHash": "c42c1a60ea7e9d1717e413896210980ab7484d8a27c69bf3f18105c896da8a15"
+    },
+    "react-expert": {
+      "source": "reactjs/react.dev",
+      "sourceType": "github",
+      "computedHash": "e53cc1a286987b7f28ba5cdd29e8ebacdde0d5822d40e938652fec8c47f33efa"
+    },
+    "react-spectrum-s2": {
+      "source": "react-spectrum.adobe.com",
+      "sourceType": "well-known",
+      "computedHash": "179ae1fa1204606dcaa9fa953ca17f290f56978007ba861dc2c69374a4ed1a6a"
+    },
+    "tanstack-router": {
+      "source": "tanstack-skills/tanstack-skills",
+      "sourceType": "github",
+      "computedHash": "24beccc4016f91bab65547209cfd849ea5e66f3d5d92820683a9dd84669ced56"
+    },
+    "vite-react-best-practices": {
+      "source": "claudiocebpaz/vite-react-best-practices",
+      "sourceType": "github",
+      "computedHash": "c383dacdd55b97e7c36641e7d0ac0c094266ef22458dea31c5000cb3e29e3d49"
+    }
+  }
+}

@@ -1,0 +1,90 @@
+type Book {
+  id: ID!
+  title: String!
+  description: String!
+  publicationDate: Date!
+  author: Author!
+}
+
+type BookEdge {
+  cursor: String!
+  node: Book!
+}
+
+type BookConnection {
+  edges: [BookEdge!]!
+  nodes: [Book!]!
+  pageInfo: PageInfo!
+  totalCount: Int!
+}
+
+extend type Author {
+  books: [Book!]!
+}
+
+type BookMutationResponse {
+  code: String!
+  success: Boolean!
+  message: String!
+  book: Book
+}
+
+type BookDeleteMutationResponse {
+  code: String!
+  success: Boolean!
+  message: String!
+}
+
+input BookCreateInput {
+  title: String!
+  description: String!
+  publicationDate: Date!
+  author: String!
+}
+
+input BookUpdateInput {
+  id: ID!
+  title: String
+  description: String
+  publicationDate: Date
+  author: String
+}
+
+input BookDeleteInput {
+  id: ID!
+}
+
+input BookListWhereInput {
+  authorId: ID
+  tagId: ID
+  titleContains: String
+}
+
+enum BookListSortBy {
+  ID
+  TITLE
+  AUTHOR_NAME
+}
+
+input BookListSortInput {
+  by: BookListSortBy!
+  direction: SortDirection = ASC
+}
+
+extend type Query {
+  bookById(id: ID!): Book
+  bookList(
+    offset: Int = 0
+    limit: Int = 20
+    after: String
+    search: String
+    sort: BookListSortInput
+    filter: BookListWhereInput
+  ): BookConnection!
+}
+
+extend type Mutation {
+  bookCreate(input: BookCreateInput!): BookMutationResponse!
+  bookUpdate(input: BookUpdateInput!): BookMutationResponse!
+  bookDelete(input: BookDeleteInput!): BookDeleteMutationResponse!
+}

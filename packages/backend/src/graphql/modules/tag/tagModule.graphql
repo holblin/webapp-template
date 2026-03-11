@@ -1,0 +1,83 @@
+type Tag {
+  id: ID!
+  name: String!
+  books: [Book!]!
+}
+
+type TagEdge {
+  cursor: String!
+  node: Tag!
+}
+
+type TagConnection {
+  edges: [TagEdge!]!
+  nodes: [Tag!]!
+  pageInfo: PageInfo!
+  totalCount: Int!
+}
+
+extend type Book {
+  tags: [Tag!]!
+}
+
+type TagMutationResponse {
+  code: String!
+  success: Boolean!
+  message: String!
+  tag: Tag
+}
+
+type TagDeleteMutationResponse {
+  code: String!
+  success: Boolean!
+  message: String!
+}
+
+input TagCreateInput {
+  name: String!
+  bookIds: [ID!]
+}
+
+input TagUpdateInput {
+  id: ID!
+  name: String
+  bookIds: [ID!]
+}
+
+input TagDeleteInput {
+  id: ID!
+}
+
+input TagListWhereInput {
+  nameContains: String
+  bookId: ID
+}
+
+enum TagListSortBy {
+  ID
+  NAME
+  BOOK_COUNT
+}
+
+input TagListSortInput {
+  by: TagListSortBy!
+  direction: SortDirection = ASC
+}
+
+extend type Query {
+  tagById(id: ID!): Tag
+  tagList(
+    offset: Int = 0
+    limit: Int = 20
+    after: String
+    search: String
+    sort: TagListSortInput
+    filter: TagListWhereInput
+  ): TagConnection!
+}
+
+extend type Mutation {
+  tagCreate(input: TagCreateInput!): TagMutationResponse!
+  tagUpdate(input: TagUpdateInput!): TagMutationResponse!
+  tagDelete(input: TagDeleteInput!): TagDeleteMutationResponse!
+}

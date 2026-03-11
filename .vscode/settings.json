@@ -1,0 +1,16 @@
+{
+  "eslint.format.enable": true,
+  "eslint.useFlatConfig": true,
+  "editor.formatOnSave": true,
+  "editor.formatOnPaste": true,
+  "editor.defaultFormatter": "esbenp.prettier-vscode",
+  "[javascript]": {
+    "editor.defaultFormatter": "dbaeumer.vscode-eslint"
+  },
+  "[typescript]": {
+    "editor.defaultFormatter": "dbaeumer.vscode-eslint"
+  },
+  "sonarlint.pathToNodeExecutable": "",
+  "js/ts.tsdk.path": "node_modules/typescript/lib",
+  "cSpell.words": ["codegen", "transtack"]
+}

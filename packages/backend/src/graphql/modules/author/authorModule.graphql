@@ -1,0 +1,104 @@
+enum AuthorCountry {
+  US
+  GB
+  FR
+  DE
+  JP
+  CA
+}
+
+type Author {
+  id: ID!
+  name: String!
+  bio: String!
+  country: AuthorCountry!
+  isActive: Boolean!
+  birthDate: Date!
+}
+
+type AuthorEdge {
+  cursor: String!
+  node: Author!
+}
+
+type AuthorConnection {
+  edges: [AuthorEdge!]!
+  nodes: [Author!]!
+  pageInfo: PageInfo!
+  totalCount: Int!
+}
+
+type AuthorMutationResponse {
+  code: String!
+  success: Boolean!
+  message: String!
+  author: Author
+}
+
+type AuthorDeleteMutationResponse {
+  code: String!
+  success: Boolean!
+  message: String!
+}
+
+input AuthorListWhereInput {
+  nameContains: String
+  country: AuthorCountry
+  isActive: Boolean
+  birthDateFrom: Date
+  birthDateTo: Date
+  hasBookTagId: ID
+  hasBookGenre: String
+  minBookCount: Int
+  publishedAfterYear: Int
+  minAverageBookRating: Float
+}
+
+enum AuthorListSortBy {
+  ID
+  NAME
+}
+
+input AuthorListSortInput {
+  by: AuthorListSortBy!
+  direction: SortDirection = ASC
+}
+
+input AuthorCreateInput {
+  name: String!
+  bio: String!
+  country: AuthorCountry!
+  isActive: Boolean!
+  birthDate: Date!
+}
+
+input AuthorUpdateInput {
+  id: ID!
+  name: String!
+  bio: String!
+  country: AuthorCountry!
+  isActive: Boolean!
+  birthDate: Date!
+}
+
+input AuthorDeleteInput {
+  id: ID!
+}
+
+extend type Query {
+  authorById(id: ID!): Author
+  authorList(
+    offset: Int = 0
+    limit: Int = 20
+    after: String
+    search: String
+    sort: AuthorListSortInput
+    filter: AuthorListWhereInput
+  ): AuthorConnection!
+}
+
+extend type Mutation {
+  authorCreate(input: AuthorCreateInput!): AuthorMutationResponse!
+  authorUpdate(input: AuthorUpdateInput!): AuthorMutationResponse!
+  authorDelete(input: AuthorDeleteInput!): AuthorDeleteMutationResponse!
+}
