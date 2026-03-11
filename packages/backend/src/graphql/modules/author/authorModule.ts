@@ -1,7 +1,6 @@
 import { existsSync, readFileSync } from 'fs';
 import { GraphQLError } from 'graphql';
 import { randomUUID } from 'node:crypto';
-import { join } from 'path';
 import { fileURLToPath } from 'url';
 import {
   AuthorListSortBy,
@@ -15,7 +14,9 @@ import { applyFuzzySearch } from '../shared/fuzzySearch.js';
 import { buildConnection } from '../shared/pagination.js';
 
 const bundledSchemaPath = fileURLToPath(new URL('./authorModule.graphql', import.meta.url));
-const sourceSchemaPath = join(process.cwd(), 'src', 'graphql', 'modules', 'author', 'authorModule.graphql');
+const sourceSchemaPath = fileURLToPath(
+  new URL('../../../../src/graphql/modules/author/authorModule.graphql', import.meta.url),
+);
 const schemaPath = existsSync(bundledSchemaPath) ? bundledSchemaPath : sourceSchemaPath;
 
 const toAuthorCountry = (country: string): ResolversParentTypes['Author']['country'] => {

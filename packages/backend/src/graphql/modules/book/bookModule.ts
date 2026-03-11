@@ -1,7 +1,6 @@
 import { existsSync, readFileSync } from 'fs';
 import { GraphQLError } from 'graphql';
 import { randomUUID } from 'node:crypto';
-import { join } from 'path';
 import { fileURLToPath } from 'url';
 import type { BookRecord } from '../../../apiClient/bookApiClient.js';
 import type { GraphQLContext } from '../../../context.js';
@@ -18,7 +17,9 @@ import { applyFuzzySearch } from '../shared/fuzzySearch.js';
 import { buildConnection } from '../shared/pagination.js';
 
 const bundledSchemaPath = fileURLToPath(new URL('./bookModule.graphql', import.meta.url));
-const sourceSchemaPath = join(process.cwd(), 'src', 'graphql', 'modules', 'book', 'bookModule.graphql');
+const sourceSchemaPath = fileURLToPath(
+  new URL('../../../../src/graphql/modules/book/bookModule.graphql', import.meta.url),
+);
 const schemaPath = existsSync(bundledSchemaPath) ? bundledSchemaPath : sourceSchemaPath;
 
 const toBookParent = (record: BookRecord): ResolversParentTypes['Book'] => ({

@@ -1,7 +1,6 @@
 import { existsSync, readFileSync } from 'fs';
 import { GraphQLError } from 'graphql';
 import { randomUUID } from 'node:crypto';
-import { join } from 'path';
 import { fileURLToPath } from 'url';
 import type { BookApiClient } from '../../../apiClient/bookApiClient.js';
 import type { TagRecord } from '../../../apiClient/tagApiClient.js';
@@ -18,7 +17,9 @@ import { applyFuzzySearch } from '../shared/fuzzySearch.js';
 import { buildConnection } from '../shared/pagination.js';
 
 const bundledSchemaPath = fileURLToPath(new URL('./tagModule.graphql', import.meta.url));
-const sourceSchemaPath = join(process.cwd(), 'src', 'graphql', 'modules', 'tag', 'tagModule.graphql');
+const sourceSchemaPath = fileURLToPath(
+  new URL('../../../../src/graphql/modules/tag/tagModule.graphql', import.meta.url),
+);
 const schemaPath = existsSync(bundledSchemaPath) ? bundledSchemaPath : sourceSchemaPath;
 
 const toTagParent = (record: TagRecord): ResolversParentTypes['Tag'] => ({
