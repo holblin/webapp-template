@@ -18,6 +18,15 @@
   "packageRules": [
     {
       "matchUpdateTypes": [
+        "minor",
+        "patch",
+        "digest"
+      ],
+      "minimumReleaseAge": "3 days",
+      "automerge": true
+    },
+    {
+      "matchUpdateTypes": [
         "major"
       ],
       "labels": [
