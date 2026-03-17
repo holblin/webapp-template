@@ -10,6 +10,7 @@ import Bookmark from '@react-spectrum/s2/icons/Bookmark';
 import Code from '@react-spectrum/s2/icons/Code';
 import Home from '@react-spectrum/s2/icons/Home';
 import InfoCircle from '@react-spectrum/s2/icons/InfoCircle';
+import OpenIn from '@react-spectrum/s2/icons/OpenIn';
 import Tag from '@react-spectrum/s2/icons/Tag';
 import UserGroup from '@react-spectrum/s2/icons/UserGroup';
 
@@ -67,9 +68,13 @@ export const Navigation = ({ compact = false, onNavigate }: NavigationProps) => 
       const selectedMenu = menus.find((menu) => menu.path === selectedPath)
 
       if (selectedMenu?.external) {
+        if (typeof window === 'undefined') {
+          return;
+        }
+
+        window.open(selectedPath, '_blank', 'noopener,noreferrer');
         onNavigate?.();
-        window.location.assign(selectedPath)
-        return
+        return;
       }
 
       navigate({ to: selectedPath as AppRoute })
@@ -91,6 +96,7 @@ export const Navigation = ({ compact = false, onNavigate }: NavigationProps) => 
             <span className={regularTabContentClassName}>
               <menu.Icon styles={iconStyle({ size: 'M' })} />
               <span>{menu.name}</span>
+              {menu.external ? <OpenIn styles={iconStyle({ size: 'S' })} /> : null}
             </span>
           )}
         </Tab>

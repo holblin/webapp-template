@@ -14,6 +14,7 @@ export default defineConfig({
       '@react-spectrum/s2/icons/Tag',
       '@react-spectrum/s2/icons/InfoCircle',
       '@react-spectrum/s2/icons/Code',
+      '@react-spectrum/s2/icons/OpenIn',
       '@react-spectrum/s2/icons/Edit',
       '@react-spectrum/s2/icons/Delete',
       '@react-spectrum/s2/icons/ChevronDoubleLeft',

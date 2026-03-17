@@ -27,6 +27,7 @@ vi.mock('@react-spectrum/s2/icons/Bookmark', () => ({ default: () => <span>Bookm
 vi.mock('@react-spectrum/s2/icons/Tag', () => ({ default: () => <span>TagIcon</span> }));
 vi.mock('@react-spectrum/s2/icons/InfoCircle', () => ({ default: () => <span>InfoCircleIcon</span> }));
 vi.mock('@react-spectrum/s2/icons/Code', () => ({ default: () => <span>CodeIcon</span> }));
+vi.mock('@react-spectrum/s2/icons/OpenIn', () => ({ default: () => <span>OpenInIcon</span> }));
 vi.mock('@react-spectrum/s2/icons/ChevronDoubleLeft', () => ({ default: () => <span>CollapseIcon</span> }));
 vi.mock('@react-spectrum/s2/icons/ChevronDoubleRight', () => ({ default: () => <span>ExpandIcon</span> }));
 vi.mock('@react-spectrum/s2/icons/Home', () => ({ default: () => <span>HomeIcon</span> }));
