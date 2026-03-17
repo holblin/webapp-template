@@ -6,6 +6,20 @@ import {fileURLToPath, URL} from 'node:url';
 import { tanstackRouter } from '@tanstack/router-plugin/vite'
 
 export default defineConfig({
+  optimizeDeps: {
+    include: [
+      '@react-spectrum/s2/icons/Home',
+      '@react-spectrum/s2/icons/UserGroup',
+      '@react-spectrum/s2/icons/Bookmark',
+      '@react-spectrum/s2/icons/Tag',
+      '@react-spectrum/s2/icons/InfoCircle',
+      '@react-spectrum/s2/icons/Code',
+      '@react-spectrum/s2/icons/Edit',
+      '@react-spectrum/s2/icons/Delete',
+      '@react-spectrum/s2/icons/ChevronDoubleLeft',
+      '@react-spectrum/s2/icons/ChevronDoubleRight',
+    ],
+  },
   resolve: {
     alias: {
       src: fileURLToPath(new URL('./src', import.meta.url))

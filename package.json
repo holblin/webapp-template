@@ -8,8 +8,10 @@
     "node": ">=24.11.0"
   },
   "scripts": {
+    "check": "npm run lint && npm run test:unit && npm run test:storybook",
     "test": "npm run test:unit",
     "test:unit": "npm run generate && npm run test:unit --workspace webapp-template-backend && npm run test:unit --workspace webapp-template-frontend",
+    "test:storybook": "npm run test:storybook --workspace webapp-template-frontend",
     "test:unit:coverage": "npm run generate && npm run test:unit:coverage --workspace webapp-template-backend && npm run test:unit:coverage --workspace webapp-template-frontend",
     "codegen:gql": "graphql-codegen --config codegen.ts",
     "codegen:routes": "npm run routes:generate --workspace webapp-template-frontend",

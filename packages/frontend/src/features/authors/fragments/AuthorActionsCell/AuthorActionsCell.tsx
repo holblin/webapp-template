@@ -1,6 +1,8 @@
 import { useFragment } from '@apollo/client/react';
-import { ActionButton } from '@react-spectrum/s2';
-import { style } from '@react-spectrum/s2/style' with { type: 'macro' };
+import { ActionButton, Tooltip, TooltipTrigger } from '@react-spectrum/s2';
+import Delete from '@react-spectrum/s2/icons/Delete';
+import Edit from '@react-spectrum/s2/icons/Edit';
+import { iconStyle, style } from '@react-spectrum/s2/style' with { type: 'macro' };
 import { AUTHOR_ACTIONS_CELL_FRAGMENT } from './AuthorActionsCell.graphql';
 
 type AuthorActionsCellProps = {
@@ -21,8 +23,18 @@ export const AuthorActionsCell = ({ authorId, onEditPress, onDeletePress }: Auth
 
   return (
     <div className={style({ display: 'flex', gap: 8 })}>
-      <ActionButton onPress={() => onEditPress(resolvedAuthorId)}>Edit</ActionButton>
-      <ActionButton onPress={() => onDeletePress(resolvedAuthorId)}>Delete</ActionButton>
+      <TooltipTrigger>
+        <ActionButton aria-label="Edit" onPress={() => onEditPress(resolvedAuthorId)}>
+          <Edit styles={iconStyle({ size: 'M' })} />
+        </ActionButton>
+        <Tooltip>Edit</Tooltip>
+      </TooltipTrigger>
+      <TooltipTrigger>
+        <ActionButton aria-label="Delete" onPress={() => onDeletePress(resolvedAuthorId)}>
+          <Delete styles={iconStyle({ size: 'M' })} />
+        </ActionButton>
+        <Tooltip>Delete</Tooltip>
+      </TooltipTrigger>
     </div>
   );
 };

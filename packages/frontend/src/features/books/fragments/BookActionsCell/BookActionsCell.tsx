@@ -1,6 +1,8 @@
 import { useFragment } from '@apollo/client/react';
-import { ActionButton } from '@react-spectrum/s2';
-import { style } from '@react-spectrum/s2/style' with { type: 'macro' };
+import { ActionButton, Tooltip, TooltipTrigger } from '@react-spectrum/s2';
+import Delete from '@react-spectrum/s2/icons/Delete';
+import Edit from '@react-spectrum/s2/icons/Edit';
+import { iconStyle, style } from '@react-spectrum/s2/style' with { type: 'macro' };
 import { BOOK_ACTIONS_CELL_FRAGMENT } from './BookActionsCell.graphql';
 
 type BookActionsCellProps = {
@@ -22,8 +24,18 @@ export const BookActionsCell = ({ bookId, onEditPress, onDeletePress }: BookActi
 
   return (
     <div className={style({ display: 'flex', gap: 8 })}>
-      <ActionButton onPress={() => onEditPress(resolvedBookId)}>Edit</ActionButton>
-      <ActionButton onPress={() => onDeletePress(resolvedBookId)}>Delete</ActionButton>
+      <TooltipTrigger>
+        <ActionButton aria-label="Edit" onPress={() => onEditPress(resolvedBookId)}>
+          <Edit styles={iconStyle({ size: 'M' })} />
+        </ActionButton>
+        <Tooltip>Edit</Tooltip>
+      </TooltipTrigger>
+      <TooltipTrigger>
+        <ActionButton aria-label="Delete" onPress={() => onDeletePress(resolvedBookId)}>
+          <Delete styles={iconStyle({ size: 'M' })} />
+        </ActionButton>
+        <Tooltip>Delete</Tooltip>
+      </TooltipTrigger>
     </div>
   );
 };

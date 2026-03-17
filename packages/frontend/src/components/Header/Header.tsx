@@ -5,11 +5,17 @@ import { style, iconStyle } from "@react-spectrum/s2/style" with { type: "macro"
 import { useTheme } from "src/providers/Theme";
 import App from '@react-spectrum/s2/icons/App';
 import {Avatar} from '@react-spectrum/s2';
+import type { ReactNode } from 'react';
 
-export const Header = () => {
+type HeaderProps = {
+  leadingAction?: ReactNode;
+};
+
+export const Header = ({ leadingAction }: HeaderProps) => {
   const {theme, setTheme} = useTheme()
   return <div className={style({display: 'flex', justifyContent: 'space-between', padding: 12, gap: 8, height: 56})}>
     <div className={style({ display: 'flex', alignItems: 'center', gap: 8})}>
+      {leadingAction}
       <App styles={iconStyle({size: 'XL'})}/>
       Template App
     </div>

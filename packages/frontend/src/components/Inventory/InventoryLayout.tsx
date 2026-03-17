@@ -1,8 +1,14 @@
 import {
   ActionButton,
+  Button,
+  ButtonGroup,
   Cell,
   Column,
+  Content,
   Divider,
+  Dialog,
+  DialogContainer,
+  Heading,
   Row,
   SearchField,
   TableBody,
@@ -12,6 +18,8 @@ import {
 } from '@react-spectrum/s2';
 import { style } from '@react-spectrum/s2/style' with { type: 'macro' };
 import type { ReactNode } from 'react';
+import { useState } from 'react';
+import { useIsSmallViewport } from 'src/components/Responsive/useIsSmallViewport';
 
 export type InventoryLayoutColumn<TRow extends object> = {
   id: string;
@@ -80,6 +88,8 @@ export const InventoryLayout = <
   sortDescriptor,
   onSortChange,
 }: InventoryLayoutProps<TRow, TState, TFilters>) => {
+  const isPhoneViewport = useIsSmallViewport(680);
+  const [isFilterDialogOpen, setIsFilterDialogOpen] = useState(false);
   const onStatePatch = (patch: Partial<TState>, resetOffset = false) => {
     const nextState: TState = {
       ...state,
@@ -92,30 +102,66 @@ export const InventoryLayout = <
 
   const filters = getFilters(state);
   const activeFilters = getActiveFilters ? getActiveFilters(state, filters) : [];
+  const isInlineFilterVisible = !isPhoneViewport && state.showFilters;
+  const controlsContainerClassName = isPhoneViewport
+    ? style({ display: 'flex', flexDirection: 'column', gap: 8, alignItems: 'stretch' })
+    : style({ display: 'flex', alignItems: 'center', gap: 8 });
+  const controlsTopBarClassName = isPhoneViewport
+    ? style({ display: 'flex', flexDirection: 'column', justifyContent: 'space-between', gap: 8 })
+    : style({ display: 'flex', justifyContent: 'space-between', alignItems: 'center', gap: 12 });
+  const searchFieldClassName = isPhoneViewport
+    ? style({ width: 'full' })
+    : style({ width: 320 });
+  const filterButtonLabel = activeFilters.length > 0
+    ? `Filters (${activeFilters.length})`
+    : 'Filters';
+  const tableContainerClassName = isPhoneViewport
+    ? style({ display: 'flex', flexDirection: 'column', gap: 8, flexGrow: 1, minHeight: 0, overflow: 'auto' })
+    : style({ display: 'flex', flexDirection: 'column', gap: 8, flexGrow: 1, minHeight: 0 });
+  const tableStyles = isPhoneViewport
+    ? style({ width: 'full', height: 'full', minWidth: 720 })
+    : style({ width: 'full', height: 'full' });
+  const layoutContainerClassName = isPhoneViewport
+    ? style({
+      padding: 12,
+      display: 'flex',
+      flexDirection: 'column',
+      gap: 12,
+      flexGrow: 1,
+      minHeight: 0,
+    })
+    : style({
+      padding: 20,
+      display: 'flex',
+      flexDirection: 'column',
+      gap: 12,
+      flexGrow: 1,
+      minHeight: 0,
+    });
 
   return (
-    <div
-      className={style({
-        padding: 20,
-        display: 'flex',
-        flexDirection: 'column',
-        gap: 12,
-        flexGrow: 1,
-        minHeight: 0,
-      })}
-    >
+    <div className={layoutContainerClassName}>
       <h1 className={style({ marginY: 0, font: 'heading-lg' })}>{title}</h1>
-      <div className={style({ display: 'flex', justifyContent: 'space-between', alignItems: 'center', gap: 12 })}>
-        <div className={style({ display: 'flex', alignItems: 'center', gap: 8 })}>
-          <ActionButton onPress={() => onStatePatch({ showFilters: !state.showFilters } as Partial<TState>)}>
-            {state.showFilters ? 'Hide filters' : 'Show filters'}
+      <div className={controlsTopBarClassName}>
+        <div className={controlsContainerClassName}>
+          <ActionButton
+            onPress={() => {
+              if (isPhoneViewport) {
+                setIsFilterDialogOpen(true);
+                return;
+              }
+
+              onStatePatch({ showFilters: !state.showFilters } as Partial<TState>);
+            }}
+          >
+            {isPhoneViewport ? filterButtonLabel : (state.showFilters ? 'Hide filters' : 'Show filters')}
           </ActionButton>
           <SearchField
             aria-label={`Search ${title}`}
             placeholder={`Search ${title.toLowerCase()}`}
             value={state.search}
             onChange={(value) => onStatePatch({ search: value } as Partial<TState>, true)}
-            styles={style({ width: 320 })}
+            styles={searchFieldClassName}
           />
           <div className={style({ color: 'gray-700', font: 'body-sm' })}>{totalCount} item(s)</div>
         </div>
@@ -149,7 +195,7 @@ export const InventoryLayout = <
         </div>
       ) : null}
       <div className={style({ display: 'flex', gap: 12, flexGrow: 1, minHeight: 0 })}>
-        {state.showFilters ? (
+        {isInlineFilterVisible ? (
           <div
             className={style({
               width: 280,
@@ -176,10 +222,10 @@ export const InventoryLayout = <
             overflow: 'hidden',
           })}
         >
-          <div className={style({ display: 'flex', flexDirection: 'column', gap: 8, flexGrow: 1, minHeight: 0 })}>
+          <div className={tableContainerClassName}>
             <TableView
               aria-label={ariaLabel}
-              styles={style({ width: 'full', height: 'full' })}
+              styles={tableStyles}
               loadingState={loadingState}
               onLoadMore={onLoadMore}
               sortDescriptor={sortDescriptor}
@@ -216,6 +262,33 @@ export const InventoryLayout = <
           </div>
         </div>
       </div>
+      <DialogContainer onDismiss={() => setIsFilterDialogOpen(false)}>
+        {isFilterDialogOpen ? (
+          <Dialog>
+            {({ close }) => (
+              <>
+                <Heading slot="title">Filters</Heading>
+                <Content>
+                  <div className={style({ display: 'flex', flexDirection: 'column', gap: 12 })}>
+                    {renderFilterPanel(filters, (patch) => onStatePatch(patch as Partial<TState>, true))}
+                  </div>
+                </Content>
+                <ButtonGroup>
+                  <Button
+                    variant="secondary"
+                    onPress={() => {
+                      close();
+                      setIsFilterDialogOpen(false);
+                    }}
+                  >
+                    Close
+                  </Button>
+                </ButtonGroup>
+              </>
+            )}
+          </Dialog>
+        ) : null}
+      </DialogContainer>
     </div>
   );
 };

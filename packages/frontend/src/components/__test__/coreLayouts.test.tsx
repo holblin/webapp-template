@@ -21,6 +21,20 @@ vi.mock('@react-spectrum/s2/style', () => ({
 vi.mock('@react-spectrum/s2/icons/App', () => ({ default: () => <span>AppIcon</span> }));
 vi.mock('@react-spectrum/s2/icons/Contrast', () => ({ default: () => <span>LightIcon</span> }));
 vi.mock('@react-spectrum/s2/icons/Lighten', () => ({ default: () => <span>DarkIcon</span> }));
+vi.mock('@react-spectrum/s2/icons/Home', () => ({ default: () => <span>HomeIcon</span> }));
+vi.mock('@react-spectrum/s2/icons/UserGroup', () => ({ default: () => <span>UserGroupIcon</span> }));
+vi.mock('@react-spectrum/s2/icons/Bookmark', () => ({ default: () => <span>BookmarkIcon</span> }));
+vi.mock('@react-spectrum/s2/icons/Tag', () => ({ default: () => <span>TagIcon</span> }));
+vi.mock('@react-spectrum/s2/icons/InfoCircle', () => ({ default: () => <span>InfoCircleIcon</span> }));
+vi.mock('@react-spectrum/s2/icons/Code', () => ({ default: () => <span>CodeIcon</span> }));
+vi.mock('@react-spectrum/s2/icons/ChevronDoubleLeft', () => ({ default: () => <span>CollapseIcon</span> }));
+vi.mock('@react-spectrum/s2/icons/ChevronDoubleRight', () => ({ default: () => <span>ExpandIcon</span> }));
+vi.mock('@react-spectrum/s2/icons/Home', () => ({ default: () => <span>HomeIcon</span> }));
+vi.mock('@react-spectrum/s2/icons/UserGroup', () => ({ default: () => <span>AuthorsIcon</span> }));
+vi.mock('@react-spectrum/s2/icons/Bookmark', () => ({ default: () => <span>BooksIcon</span> }));
+vi.mock('@react-spectrum/s2/icons/Tag', () => ({ default: () => <span>TagsIcon</span> }));
+vi.mock('@react-spectrum/s2/icons/InfoCircle', () => ({ default: () => <span>AboutIcon</span> }));
+vi.mock('@react-spectrum/s2/icons/Code', () => ({ default: () => <span>GraphqlIcon</span> }));
 
 vi.mock('@tanstack/react-router', () => ({
   useNavigate: () => mocks.navigate,
@@ -65,6 +79,8 @@ vi.mock('@react-spectrum/s2', () => {
       onPress?.();
     }),
     DialogContainer: component('div'),
+    TooltipTrigger: component('div'),
+    Tooltip: component('div'),
     Popover: component('div'),
     DialogTrigger: component('div'),
     Divider: component('hr'),

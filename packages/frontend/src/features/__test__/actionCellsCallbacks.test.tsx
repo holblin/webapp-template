@@ -19,14 +19,19 @@ vi.mock('@apollo/client/react', () => ({
   useFragment: mocks.useFragmentMock,
 }));
 
+vi.mock('@react-spectrum/s2/icons/Edit', () => ({ default: () => <span>EditIcon</span> }));
+vi.mock('@react-spectrum/s2/icons/Delete', () => ({ default: () => <span>DeleteIcon</span> }));
+
 vi.mock('@react-spectrum/s2', () => ({
-  ActionButton: ({ onPress, children }: React.PropsWithChildren<{ onPress?: () => void }>) => {
+  ActionButton: ({ onPress, children, 'aria-label': ariaLabel }: React.PropsWithChildren<{ onPress?: () => void; 'aria-label'?: string }>) => {
     mocks.actionButtons.push({
-      label: typeof children === 'string' ? children : '',
+      label: ariaLabel ?? (typeof children === 'string' ? children : ''),
       onPress,
     });
     return <button>{children}</button>;
   },
+  TooltipTrigger: ({ children }: React.PropsWithChildren) => <div>{children}</div>,
+  Tooltip: ({ children }: React.PropsWithChildren) => <div>{children}</div>,
 }));
 
 describe('action cell callbacks', () => {

@@ -12,6 +12,9 @@ vi.mock('@react-spectrum/s2/style', () => ({
   iconStyle: () => '',
 }));
 
+vi.mock('@react-spectrum/s2/icons/Edit', () => ({ default: () => <span>EditIcon</span> }));
+vi.mock('@react-spectrum/s2/icons/Delete', () => ({ default: () => <span>DeleteIcon</span> }));
+
 vi.mock('@react-spectrum/s2', () => {
   const component = (tag: string) => {
     return ({ children, ...props }: React.PropsWithChildren<Record<string, unknown>>) => {
@@ -25,6 +28,8 @@ vi.mock('@react-spectrum/s2', () => {
 
   return {
     ActionButton: component('button'),
+    TooltipTrigger: component('div'),
+    Tooltip: component('div'),
     DateRangePicker: component('div'),
     NumberField: component('div'),
     Picker: component('div'),
