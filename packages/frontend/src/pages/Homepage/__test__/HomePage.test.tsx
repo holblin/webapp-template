@@ -3,8 +3,6 @@ import React from 'react';
 import { renderToStaticMarkup } from 'react-dom/server';
 import { describe, expect, it, vi } from 'vitest';
 
-vi.mock('../Homepage.css', () => ({}));
-
 vi.mock('@react-spectrum/s2/style', () => ({
   style: () => '',
 }));
@@ -17,9 +15,9 @@ vi.mock('@react-spectrum/s2', () => {
   };
 
   return {
-    ActionButton: component('button'),
-    Checkbox: component('label'),
-    CheckboxGroup: component('div'),
+    ButtonGroup: component('div'),
+    Divider: component('hr'),
+    LinkButton: component('a'),
   };
 });
 
@@ -29,8 +27,8 @@ describe('HomePage', () => {
   it('renders landing content', () => {
     const html = renderToStaticMarkup(<HomePage />);
 
-    expect(html).toContain('Vite + React');
-    expect(html).toContain('count is 0');
-    expect(html).toContain('Configure Apollo Client');
+    expect(html).toContain('Build production-ready web apps faster');
+    expect(html).toContain('React + React Spectrum + GraphQL template');
+    expect(html).toContain('Quick start path');
   });
 });
