@@ -5,7 +5,7 @@ test.describe('App Navigation', () => {
     await page.goto('/');
 
     await expect(page.getByText('Template App')).toBeVisible();
-    await expect(page.getByRole('heading', { name: 'Vite + React' })).toBeVisible();
+    await expect(page.getByRole('heading', { name: 'Build production-ready web apps faster' })).toBeVisible();
   });
 
   test('navigates to authors page', async ({ page }) => {
