@@ -1,4 +1,4 @@
-# syntax=docker/dockerfile:1
+# syntax=docker/dockerfile:1.7
 
 FROM node:24.11-alpine AS base
 WORKDIR /app
@@ -7,7 +7,7 @@ FROM base AS deps
 COPY package.json package-lock.json ./
 COPY packages/backend/package.json ./packages/backend/package.json
 COPY packages/frontend/package.json ./packages/frontend/package.json
-RUN npm ci
+RUN --mount=type=cache,target=/root/.npm npm ci
 
 FROM deps AS build
 COPY . .
@@ -15,11 +15,8 @@ RUN npm run codegen \
   && npm run compile --workspace webapp-template-backend \
   && npm run build --workspace webapp-template-frontend
 
-FROM base AS prod-deps
-COPY package.json package-lock.json ./
-COPY packages/backend/package.json ./packages/backend/package.json
-COPY packages/frontend/package.json ./packages/frontend/package.json
-RUN npm ci --omit=dev
+FROM deps AS prod-deps
+RUN npm prune --omit=dev
 
 FROM base AS runner
 ENV NODE_ENV=production

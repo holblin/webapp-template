@@ -2,6 +2,14 @@
 .gitignore
 .vscode
 .agents
+.github
+docs
+e2e
+AGENTS.md
+DOCKER.md
+playwright.config.ts
+renovate.json
+skills-lock.json
 node_modules
 **/node_modules
 **/dist
