@@ -13,11 +13,6 @@ const mocks = vi.hoisted(() => ({
   closeAllDialogs: vi.fn(),
 }));
 
-vi.mock('@react-spectrum/s2/style', () => ({
-  style: () => '',
-  iconStyle: () => '',
-}));
-
 vi.mock('@react-spectrum/s2/icons/App', () => ({ default: () => <span>AppIcon</span> }));
 vi.mock('@react-spectrum/s2/icons/Contrast', () => ({ default: () => <span>LightIcon</span> }));
 vi.mock('@react-spectrum/s2/icons/Lighten', () => ({ default: () => <span>DarkIcon</span> }));

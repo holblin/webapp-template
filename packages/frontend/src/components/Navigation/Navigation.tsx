@@ -39,16 +39,6 @@ export const Navigation = ({ compact = false, onNavigate }: NavigationProps) => 
 
   const navigate = useNavigate();
   const { pathname } = useLocation();
-  const regularTabContentClassName = style({
-    display: 'flex',
-    alignItems: 'center',
-    gap: 8,
-  });
-  const compactTabContentClassName = style({
-    display: 'flex',
-    alignItems: 'center',
-    justifyContent: 'center',
-  });
 
   const selectedRoute = useMemo(() => {
     const route = menus
@@ -87,13 +77,13 @@ export const Navigation = ({ compact = false, onNavigate }: NavigationProps) => 
         <Tab key={menu.path} id={menu.path} aria-label={menu.name}>
           {compact ? (
             <TooltipTrigger>
-              <span className={compactTabContentClassName}>
+              <span className={style({ display: 'flex', alignItems: 'center', justifyContent: 'center' })}>
                 <menu.Icon styles={iconStyle({ size: 'M' })} />
               </span>
               <Tooltip>{menu.name}</Tooltip>
             </TooltipTrigger>
           ) : (
-            <span className={regularTabContentClassName}>
+            <span className={style({ display: 'flex', alignItems: 'center', gap: 8 })}>
               <menu.Icon styles={iconStyle({ size: 'M' })} />
               <span>{menu.name}</span>
               {menu.external ? <OpenIn styles={iconStyle({ size: 'S' })} /> : null}

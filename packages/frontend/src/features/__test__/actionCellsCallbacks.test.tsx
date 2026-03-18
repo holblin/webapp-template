@@ -10,11 +10,6 @@ const mocks = vi.hoisted(() => ({
   actionButtons: [] as Array<{ label: string; onPress?: () => void }>,
 }));
 
-vi.mock('@react-spectrum/s2/style', () => ({
-  style: () => '',
-  iconStyle: () => '',
-}));
-
 vi.mock('@apollo/client/react', () => ({
   useFragment: mocks.useFragmentMock,
 }));

@@ -12,22 +12,6 @@ export const Layout = ({ children }: PropsWithChildren) => {
   const isSmallViewport = useIsSmallViewport(900);
   const [isSidebarCollapsed, setIsSidebarCollapsed] = useState(false);
   const [isMobileNavigationOpen, setIsMobileNavigationOpen] = useState(false);
-  const sidebarClassName = isSidebarCollapsed
-    ? style({
-      width: 80, padding: 12, overflow: 'auto', height: 'full',
-      borderWidth: 0, borderEndWidth: 2, borderColor: 'gray-300', borderStyle: 'solid',
-      display: 'flex', flexDirection: 'column', gap: 12, flexShrink: 0,
-    })
-    : style({
-      width: 220, padding: 12, overflow: 'auto', height: 'full',
-      borderWidth: 0, borderEndWidth: 2, borderColor: 'gray-300', borderStyle: 'solid',
-      display: 'flex', flexDirection: 'column', gap: 12, flexShrink: 0,
-    });
-  const sidebarNavigationClassName = style({
-    flexGrow: 1,
-    minHeight: 0,
-    overflow: 'auto',
-  });
 
   const isHeaderMenuVisible = isSmallViewport;
 
@@ -44,8 +28,26 @@ export const Layout = ({ children }: PropsWithChildren) => {
       borderWidth: 0, borderTopWidth: 2, borderColor: 'gray-300', borderStyle: 'solid',
     })}>
       {!isSmallViewport ? (
-        <div className={sidebarClassName}>
-          <div className={sidebarNavigationClassName}>
+        <div
+          className={style({
+            width: {
+              default: 220,
+              isSidebarCollapsed: 80,
+            },
+            padding: 12,
+            overflow: 'auto',
+            height: 'full',
+            borderWidth: 0,
+            borderEndWidth: 2,
+            borderColor: 'gray-300',
+            borderStyle: 'solid',
+            display: 'flex',
+            flexDirection: 'column',
+            gap: 12,
+            flexShrink: 0,
+          })({ isSidebarCollapsed })}
+        >
+          <div className={style({ flexGrow: 1, minHeight: 0, overflow: 'auto' })}>
             <Navigation compact={isSidebarCollapsed} />
           </div>
           <TooltipTrigger>
@@ -59,7 +61,7 @@ export const Layout = ({ children }: PropsWithChildren) => {
           </TooltipTrigger>
         </div>
       ) : null}
-      <div className={style({flexGrow: 1, minHeight: 0, display: 'flex', flexDirection: 'column', overflow: 'hidden'})}>
+      <div className={style({flexGrow: 1, minHeight: 0, display: 'flex', flexDirection: 'column', overflowY: 'scroll'})}>
         {children}
       </div>
     </div>

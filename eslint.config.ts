@@ -69,7 +69,24 @@ export default defineConfig([
       react: {
         version: "detect",
       }
-    }
+    },
+    rules: {
+      'no-restricted-syntax': [
+        'error',
+        {
+          selector: "VariableDeclarator[init.type='CallExpression'][init.callee.name='style']",
+          message: "Inline @react-spectrum/s2 style() calls directly in JSX props instead of assigning them to variables.",
+        },
+        {
+          selector: "VariableDeclarator[init.type='ConditionalExpression'][init.consequent.type='CallExpression'][init.consequent.callee.name='style']",
+          message: "Inline @react-spectrum/s2 style() calls directly in JSX props instead of assigning them to variables.",
+        },
+        {
+          selector: "VariableDeclarator[init.type='ConditionalExpression'][init.alternate.type='CallExpression'][init.alternate.callee.name='style']",
+          message: "Inline @react-spectrum/s2 style() calls directly in JSX props instead of assigning them to variables.",
+        },
+      ],
+    },
   },
   // frontend tooling/config files run in Node
   {

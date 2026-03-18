@@ -14,11 +14,6 @@ const mocks = vi.hoisted(() => ({
   tableViewProps: [] as Array<Record<string, unknown>>,
 }));
 
-vi.mock('@react-spectrum/s2/style', () => ({
-  style: () => '',
-  iconStyle: () => '',
-}));
-
 vi.mock('@react-spectrum/s2', () => {
   const component = (tag: string) => {
     return ({ children, ...props }: React.PropsWithChildren<Record<string, unknown>>) => {

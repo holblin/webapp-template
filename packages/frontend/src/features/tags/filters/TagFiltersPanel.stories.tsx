@@ -13,39 +13,6 @@ type TagFiltersStoryArgs = {
   }>;
 };
 
-const canvasLayoutClassName = style({
-  display: 'flex',
-  justifyContent: 'center',
-  minHeight: 420,
-  padding: 24,
-  width: 'full',
-});
-
-const contentRowClassName = style({
-  display: 'flex',
-  alignItems: 'start',
-  gap: 16,
-  width: 'full',
-  maxWidth: 920,
-});
-
-const panelClassName = style({
-  width: 360,
-  flexShrink: 0,
-});
-
-const jsonPreviewClassName = style({
-  marginY: 0,
-  padding: 12,
-  borderWidth: 1,
-  borderStyle: 'solid',
-  borderColor: 'gray-400',
-  borderRadius: 'lg',
-  overflow: 'auto',
-  maxHeight: 420,
-  flexGrow: 1,
-});
-
 const StatefulTagFiltersPanel = ({ initialFilters, books }: TagFiltersStoryArgs) => {
   const [filters, setFilters] = useState<TagFilters>(initialFilters);
 
@@ -54,16 +21,28 @@ const StatefulTagFiltersPanel = ({ initialFilters, books }: TagFiltersStoryArgs)
   }, [initialFilters]);
 
   return (
-    <div className={canvasLayoutClassName}>
-      <div className={contentRowClassName}>
-        <div className={panelClassName}>
+    <div className={style({ display: 'flex', justifyContent: 'center', minHeight: 420, padding: 24, width: 'full' })}>
+      <div className={style({ display: 'flex', alignItems: 'start', gap: 16, width: 'full', maxWidth: 920 })}>
+        <div className={style({ width: 360, flexShrink: 0 })}>
           <TagFiltersPanel
             filters={filters}
             books={books}
             onFiltersChange={(patch) => setFilters((previous) => ({ ...previous, ...patch }))}
           />
         </div>
-        <pre className={jsonPreviewClassName}>
+        <pre
+          className={style({
+            marginY: 0,
+            padding: 12,
+            borderWidth: 1,
+            borderStyle: 'solid',
+            borderColor: 'gray-400',
+            borderRadius: 'lg',
+            overflow: 'auto',
+            maxHeight: 420,
+            flexGrow: 1,
+          })}
+        >
           {JSON.stringify(filters, null, 2)}
         </pre>
       </div>

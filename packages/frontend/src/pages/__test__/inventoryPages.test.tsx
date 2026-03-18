@@ -4,11 +4,6 @@ import { renderToStaticMarkup } from 'react-dom/server';
 import { describe, expect, it, vi } from 'vitest';
 import { SortDirection } from 'src/__generated__/gql/graphql';
 
-vi.mock('@react-spectrum/s2/style', () => ({
-  style: () => '',
-  iconStyle: () => '',
-}));
-
 vi.mock('@react-spectrum/s2', () => {
   const component = (tag: string) => {
     return ({ children, ...props }: React.PropsWithChildren<Record<string, unknown>>) => {

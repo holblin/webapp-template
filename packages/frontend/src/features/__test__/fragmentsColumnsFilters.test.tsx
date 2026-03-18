@@ -7,11 +7,6 @@ const mocks = vi.hoisted(() => ({
   useFragmentMock: vi.fn(),
 }));
 
-vi.mock('@react-spectrum/s2/style', () => ({
-  style: () => '',
-  iconStyle: () => '',
-}));
-
 vi.mock('@react-spectrum/s2/icons/Edit', () => ({ default: () => <span>EditIcon</span> }));
 vi.mock('@react-spectrum/s2/icons/Delete', () => ({ default: () => <span>DeleteIcon</span> }));
 

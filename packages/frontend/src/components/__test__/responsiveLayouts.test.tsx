@@ -11,11 +11,6 @@ const mocks = vi.hoisted(() => ({
   useIsSmallViewport: vi.fn((maxWidth: number) => maxWidth >= 900),
 }));
 
-vi.mock('@react-spectrum/s2/style', () => ({
-  style: () => '',
-  iconStyle: () => '',
-}));
-
 vi.mock('@tanstack/react-router', () => ({
   useNavigate: () => mocks.navigate,
   useLocation: () => ({ pathname: '/authors' }),

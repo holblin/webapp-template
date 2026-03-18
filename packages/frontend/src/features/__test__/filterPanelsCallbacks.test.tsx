@@ -16,11 +16,6 @@ const mocks = vi.hoisted(() => ({
   numberFieldProps: [] as ControlProps[],
 }));
 
-vi.mock('@react-spectrum/s2/style', () => ({
-  style: () => '',
-  iconStyle: () => '',
-}));
-
 vi.mock('@react-spectrum/s2', () => {
   const passthrough = (tag: string) => (
     { children, ...props }: React.PropsWithChildren<ControlProps>,
