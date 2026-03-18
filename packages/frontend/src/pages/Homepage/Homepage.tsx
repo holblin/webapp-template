@@ -5,6 +5,10 @@ export const HomePage = () => {
   return (
     <main
       className={style({
+        width: 'full',
+        flexGrow: 1,
+        minHeight: 0,
+        overflowY: 'auto',
         padding: 24,
         maxWidth: 1100,
         marginX: 'auto',

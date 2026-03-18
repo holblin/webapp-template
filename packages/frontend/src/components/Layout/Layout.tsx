@@ -61,7 +61,13 @@ export const Layout = ({ children }: PropsWithChildren) => {
           </TooltipTrigger>
         </div>
       ) : null}
-      <div className={style({flexGrow: 1, minHeight: 0, display: 'flex', flexDirection: 'column', overflowY: 'scroll'})}>
+      <div className={style({
+        flexGrow: 1,
+        minHeight: 0,
+        display: 'flex',
+        flexDirection: 'column',
+        overflowY: 'hidden',
+      })}>
         {children}
       </div>
     </div>
