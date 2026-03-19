@@ -24,9 +24,9 @@
     "cors": "^2.8.6",
     "dataloader": "^2.2.3",
     "express": "^5.2.1",
-    "fuse.js": "^7.1.0",
     "graphql": "^16.13.1",
-    "graphql-scalars": "^1.25.0"
+    "graphql-scalars": "^1.25.0",
+    "search-string": "^4.1.0"
   },
   "devDependencies": {
     "@types/cors": "^2.8.19",

@@ -146,7 +146,7 @@ describe('dialog smoke tests', () => {
 
     const html = renderToStaticMarkup(
       <div>
-        <CreateAuthorDialog onCompleted={() => {}} />
+        <CreateAuthorDialog onCompleted={() => {}} openCycle={1} />
         <UpdateAuthorDialog authorId="author-1" onCompleted={() => {}} />
         <DeleteAuthorDialog authorId="author-1" onCompleted={() => {}} />
 
@@ -229,7 +229,7 @@ describe('dialog smoke tests', () => {
     const onCompleted = vi.fn();
     renderToStaticMarkup(
       <div>
-        <CreateAuthorDialog onCompleted={onCompleted} />
+        <CreateAuthorDialog onCompleted={onCompleted} openCycle={1} />
         <UpdateAuthorDialog authorId="author-1" onCompleted={onCompleted} />
         <DeleteAuthorDialog authorId="author-1" onCompleted={onCompleted} />
         <CreateBookDialog onCompleted={onCompleted} />

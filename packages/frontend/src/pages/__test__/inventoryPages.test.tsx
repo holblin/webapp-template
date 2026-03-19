@@ -242,7 +242,7 @@ describe('inventory pages', () => {
         col: { sortField?: string },
         onPatch: (patch: unknown, resetOffset?: boolean) => void,
       ) => void)(sortDescriptor, column, onStatePatch);
-      (props.renderCreateDialog as (onCompleted: () => void) => React.ReactNode)(vi.fn());
+      (props.renderCreateDialog as (onCompleted: () => void, openCycle: number) => React.ReactNode)(vi.fn(), 1);
       (props.renderUpdateDialog as (id: string, onCompleted: () => void) => React.ReactNode)('id-1', vi.fn());
       (props.renderDeleteDialog as (id: string, onCompleted: () => void) => React.ReactNode)('id-1', vi.fn());
 

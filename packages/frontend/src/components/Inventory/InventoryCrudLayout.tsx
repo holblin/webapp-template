@@ -23,7 +23,7 @@ type InventoryCrudLayoutProps<
     onEditPress: (id: TId) => void;
     onDeletePress: (id: TId) => void;
   }) => InventoryLayoutColumn<TRow>[];
-  renderCreateDialog: (onCompleted: () => void) => ReactNode;
+  renderCreateDialog: (onCompleted: () => void, openCycle: number) => ReactNode;
   renderUpdateDialog: (id: TId, onCompleted: () => void) => ReactNode;
   renderDeleteDialog: (id: TId, onCompleted: () => void) => ReactNode;
   onRefresh: () => Promise<void> | void;
@@ -59,6 +59,7 @@ export const InventoryCrudLayout = <
 }: InventoryCrudLayoutProps<TRow, TState, TFilters, TId>) => {
   const {
     isCreateDialogOpen,
+    createDialogOpenCycle,
     openCreateDialog,
     editingId,
     setEditingId,
@@ -103,7 +104,7 @@ export const InventoryCrudLayout = <
       />
 
       <DialogContainer onDismiss={closeAllDialogs}>
-        {isCreateDialogOpen ? renderCreateDialog(onCompleted) : null}
+        {isCreateDialogOpen ? renderCreateDialog(onCompleted, createDialogOpenCycle) : null}
         {editingId ? renderUpdateDialog(editingId, onCompleted) : null}
         {deletingId ? renderDeleteDialog(deletingId, onCompleted) : null}
       </DialogContainer>

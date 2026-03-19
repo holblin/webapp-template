@@ -20,7 +20,7 @@ Most relevant docs for frontend GraphQL integration:
 
 - Backend list queries use connection-style pagination with `after` cursors.
 - Backend list queries support `offset`, `limit`, `search`, `sort`, and `filter`.
-- Search behavior is fuzzy (Fuse.js), not plain substring matching.
+- Search behavior is token-based and parsed with `search-string` (supports negation like `-term`).
 
 ## Storybook
 

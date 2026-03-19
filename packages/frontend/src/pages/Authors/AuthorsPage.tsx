@@ -96,8 +96,8 @@ export const AuthorsPage = () => {
         );
       }}
       onRefresh={refresh}
-      renderCreateDialog={(onCompleted) => (
-        <CreateAuthorDialog onCompleted={onCompleted} />
+      renderCreateDialog={(onCompleted, openCycle) => (
+        <CreateAuthorDialog onCompleted={onCompleted} openCycle={openCycle} />
       )}
       renderUpdateDialog={(authorId, onCompleted) => (
         <UpdateAuthorDialog authorId={authorId} onCompleted={onCompleted} />

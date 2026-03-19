@@ -44,6 +44,7 @@ vi.mock('src/providers/Theme', () => ({
 vi.mock('src/features/inventory/hooks/useCrudDialogState', () => ({
   useCrudDialogState: () => ({
     isCreateDialogOpen: false,
+    createDialogOpenCycle: 0,
     openCreateDialog: mocks.onCreateOpen,
     editingId: null,
     setEditingId: mocks.setEditingId,

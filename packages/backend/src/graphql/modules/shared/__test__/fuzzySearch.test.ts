@@ -31,7 +31,7 @@ describe('applyFuzzySearch', () => {
       keys: ['title'],
     });
 
-    expect(result.map((item) => item.id)).toContain('1');
+    expect(result.map((item) => item.id)).toEqual(['1']);
   });
 
   it('supports searching across other configured keys', () => {
@@ -42,5 +42,25 @@ describe('applyFuzzySearch', () => {
     });
 
     expect(result.map((item) => item.id)).toEqual(['2']);
+  });
+
+  it('does not match on single-character queries', () => {
+    const result = applyFuzzySearch({
+      items,
+      search: 'a',
+      keys: ['title'],
+    });
+
+    expect(result).toEqual([]);
+  });
+
+  it('supports negated text segments', () => {
+    const result = applyFuzzySearch({
+      items,
+      search: 'city -glass',
+      keys: ['title'],
+    });
+
+    expect(result).toEqual([]);
   });
 });
