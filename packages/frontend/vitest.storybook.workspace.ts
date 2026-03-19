@@ -1,8 +1,11 @@
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
 import crypto from 'node:crypto';
-import { defineWorkspace } from 'vitest/config';
+import { defineConfig, defineProject } from 'vitest/config';
+import { playwright } from '@vitest/browser-playwright';
 import { storybookTest } from '@storybook/addon-vitest/vitest-plugin';
+import react from '@vitejs/plugin-react';
+import macros from 'unplugin-parcel-macros';
 
 if (typeof (crypto as { hash?: unknown }).hash !== 'function') {
   (crypto as {
@@ -18,24 +21,38 @@ const storybookProjectName = process.env.STORYBOOK_CONFIG_DIR
   ? `storybook:${process.env.STORYBOOK_CONFIG_DIR}`
   : 'storybook';
 
-export default defineWorkspace([
-  './vitest.config.ts',
-  {
-    extends: './vitest.config.ts',
-    plugins: [
-      storybookTest({
-        configDir: path.join(dirname, '.storybook'),
+export default defineConfig({
+  test: {
+    projects: [
+      defineProject({
+        plugins: [
+          macros.vite(),
+          react(),
+          storybookTest({
+            configDir: path.join(dirname, '.storybook'),
+          }),
+        ],
+        resolve: {
+          alias: {
+            src: path.join(dirname, 'src'),
+          },
+        },
+        test: {
+          name: storybookProjectName,
+          browser: {
+            enabled: true,
+            headless: true,
+            provider: playwright(),
+            instances: [{ browser: 'chromium' }],
+          },
+          setupFiles: ['./.storybook/vitest.setup.ts'],
+          server: {
+            deps: {
+              inline: [/node_modules\/@react-spectrum/],
+            },
+          },
+        },
       }),
     ],
-    test: {
-      name: storybookProjectName,
-      browser: {
-        enabled: true,
-        headless: true,
-        provider: 'playwright',
-        instances: [{ browser: 'chromium' }],
-      },
-      setupFiles: ['./.storybook/vitest.setup.ts'],
-    },
   },
-]);
+});
