@@ -27,12 +27,14 @@ export const createBookInventoryColumns = ({
   {
     id: 'id',
     header: 'Id',
+    minWidth: 120,
     sortField: BookListSortBy.Id,
     renderCell: (row) => <BookIdCell bookId={row.node.id} />,
   },
   {
     id: 'title',
     header: 'Title',
+    minWidth: 220,
     isRowHeader: true,
     sortField: BookListSortBy.Title,
     renderCell: (row) => <BookTitleCell bookId={row.node.id} />,
@@ -40,27 +42,32 @@ export const createBookInventoryColumns = ({
   {
     id: 'description',
     header: 'Description',
+    minWidth: 320,
     renderCell: (row) => <BookDescriptionCell bookId={row.node.id} />,
   },
   {
     id: 'publicationDate',
     header: 'Publication date',
+    minWidth: 180,
     renderCell: (row) => <BookPublicationDateCell bookId={row.node.id} />,
   },
   {
     id: 'author',
     header: 'Author',
+    minWidth: 220,
     sortField: BookListSortBy.AuthorName,
     renderCell: (row) => <BookAuthorCell bookId={row.node.id} />,
   },
   {
     id: 'tags',
     header: 'Tags',
+    minWidth: 240,
     renderCell: (row) => <BookTagsCell bookId={row.node.id} />,
   },
   {
     id: 'actions',
     header: 'Actions',
+    minWidth: 160,
     renderCell: (row) => (
       <BookActionsCell
         bookId={row.node.id}

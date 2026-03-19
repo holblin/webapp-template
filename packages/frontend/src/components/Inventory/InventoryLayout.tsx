@@ -17,7 +17,7 @@ import {
   type SortDescriptor,
 } from '@react-spectrum/s2';
 import { style } from '@react-spectrum/s2/style' with { type: 'macro' };
-import type { ReactNode } from 'react';
+import type { ComponentProps, ReactNode } from 'react';
 import { useState } from 'react';
 import { useIsSmallViewport } from 'src/components/Responsive/useIsSmallViewport';
 
@@ -28,6 +28,7 @@ export type InventoryLayoutColumn<TRow extends object> = {
   allowsSorting?: boolean;
   sortField?: string;
   allowsResizing?: boolean;
+  minWidth?: ComponentProps<typeof Column>['minWidth'];
   renderCell: (row: TRow) => ReactNode;
 };
 
@@ -135,6 +136,7 @@ const InventoryTable = <TRow extends object, TState extends InventoryLayoutState
                 isRowHeader={column.isRowHeader}
                 allowsSorting={column.allowsSorting ?? Boolean(column.sortField)}
                 allowsResizing={column.allowsResizing ?? true}
+                minWidth={column.minWidth}
               >
                 {column.header}
               </Column>

@@ -27,12 +27,14 @@ export const createAuthorInventoryColumns = ({
   {
     id: 'id',
     header: 'Id',
+    minWidth: 120,
     sortField: AuthorListSortBy.Id,
     renderCell: (row) => <AuthorIdCell authorId={row.node.id} />,
   },
   {
     id: 'name',
     header: 'Name',
+    minWidth: 220,
     isRowHeader: true,
     sortField: AuthorListSortBy.Name,
     renderCell: (row) => <AuthorNameCell authorId={row.node.id} />,
@@ -40,31 +42,37 @@ export const createAuthorInventoryColumns = ({
   {
     id: 'bio',
     header: 'Bio',
+    minWidth: 320,
     renderCell: (row) => <AuthorBioCell authorId={row.node.id} />,
   },
   {
     id: 'country',
     header: 'Country',
+    minWidth: 180,
     renderCell: (row) => <AuthorCountryCell authorId={row.node.id} />,
   },
   {
     id: 'isActive',
     header: 'Active',
+    minWidth: 140,
     renderCell: (row) => <AuthorIsActiveCell authorId={row.node.id} />,
   },
   {
     id: 'birthDate',
     header: 'Birth date',
+    minWidth: 180,
     renderCell: (row) => <AuthorBirthDateCell authorId={row.node.id} />,
   },
   {
     id: 'books',
     header: 'Books',
+    minWidth: 160,
     renderCell: (row) => <AuthorBooksCountCell authorId={row.node.id} />,
   },
   {
     id: 'actions',
     header: 'Actions',
+    minWidth: 160,
     renderCell: (row) => (
       <AuthorActionsCell
         authorId={row.node.id}
