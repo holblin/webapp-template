@@ -16,8 +16,8 @@
     "test:unit": "npm run routes:generate && vitest run --config vitest.config.ts",
     "test:unit:watch": "npm run routes:generate && vitest --config vitest.config.ts",
     "test:unit:coverage": "npm run routes:generate && vitest run --config vitest.config.ts --coverage",
-    "test:storybook": "npm run routes:generate && vitest run --workspace vitest.storybook.workspace.ts --project \"storybook*\"",
-    "test:storybook:watch": "npm run routes:generate && vitest --workspace vitest.storybook.workspace.ts --project \"storybook*\"",
+    "test:storybook": "npm run routes:generate && vitest run --config vitest.storybook.workspace.ts --project \"storybook*\"",
+    "test:storybook:watch": "npm run routes:generate && vitest --config vitest.storybook.workspace.ts --project \"storybook*\"",
     "preview": "vite preview",
     "storybook": "storybook dev -p 6006",
     "build-storybook": "storybook build"
@@ -45,6 +45,7 @@
     "@types/react-dom": "^19.2.3",
     "@vitejs/plugin-react": "^6.0.1",
     "@vitest/browser": "^4.1.0",
+    "@vitest/browser-playwright": "^4.1.0",
     "@vitest/coverage-v8": "^4.1.0",
     "globals": "^17.4.0",
     "jsdom": "^29.0.0",

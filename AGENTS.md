@@ -17,3 +17,10 @@
 - Reuse existing helpers under `packages/frontend/src/features/inventory/` before adding new page-level logic.
 - For inventory pages, prefer `InventoryCrudLayout`, `useInventoryPageQuery`, and `sorting.ts` helpers over copy/paste.
 - For dialog required-field checks, prefer `getRequiredFieldError` over repeated `if (!value.trim())` chains.
+
+## Node/NPM Commands
+
+- Before running `node`, `npm`, `npx`, or workspace scripts, initialize Node with `nvm` for this repo.
+- Use this command pattern in shell calls:
+  - `source ~/.zprofile && nvm use && <command>`
+- Repo Node version is defined in `.nvmrc` (`v24.11.0`).
