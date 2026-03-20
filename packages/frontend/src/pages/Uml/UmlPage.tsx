@@ -1,5 +1,9 @@
-import { ActionButton, ButtonGroup, Divider, LinkButton, Tooltip, TooltipTrigger } from '@react-spectrum/s2'
+import { ActionButton, ActionButtonGroup, ButtonGroup, Divider, LinkButton, Tooltip, TooltipTrigger } from '@react-spectrum/s2'
 import { style } from '@react-spectrum/s2/style' with { type: 'macro' }
+import AlignCenter from '@react-spectrum/s2/icons/AlignCenter';
+import Maximize from '@react-spectrum/s2/icons/Maximize';
+import ZoomIn from '@react-spectrum/s2/icons/ZoomIn';
+import ZoomOut from '@react-spectrum/s2/icons/ZoomOut';
 import {
   Background,
   Handle,
@@ -117,7 +121,7 @@ const nodes: Node<UmlNodeData>[] = [
   {
     id: 'book',
     type: 'umlEntity',
-    position: { x: 440, y: 120 },
+    position: { x: 560, y: 120 },
     width: 280,
     height: 240,
     data: {
@@ -130,7 +134,7 @@ const nodes: Node<UmlNodeData>[] = [
   {
     id: 'tag',
     type: 'umlEntity',
-    position: { x: 840, y: 120 },
+    position: { x: 1080, y: 150 },
     width: 280,
     height: 180,
     data: {
@@ -171,76 +175,44 @@ const edges: Edge[] = [
   },
 ]
 
-const toolbarContainerClassName = style({
-  display: 'flex',
-  flexDirection: 'column',
-  borderWidth: 1,
-  borderStyle: 'solid',
-  borderRadius: 'sm',
-  overflow: 'hidden',
-  boxShadow: 'elevated',
-});
-
-const toolbarButtonWrapClassName = style({
-  display: 'flex',
-  alignItems: 'center',
-  justifyContent: 'center',
-  width: 44,
-  height: 44,
-  paddingX: 2,
-  paddingY: 2,
-  borderWidth: 0,
-  borderBottomWidth: 1,
-  borderStyle: 'solid',
-});
-
-const UmlFlowToolbar = ({ isDark }: { isDark: boolean }) => {
+const UmlFlowToolbar = () => {
   const reactFlow = useReactFlow();
 
-  const borderColor = isDark ? '#4A5563' : '#CED5DD';
-  const backgroundColor = isDark ? '#232B34' : '#F8FAFC';
-  const buttonColor = isDark ? '#F8FAFC' : '#11181F';
-
   return (
-    <Panel position="bottom-left">
-      <div className={toolbarContainerClassName} style={{ borderColor, backgroundColor }}>
-        <div className={toolbarButtonWrapClassName} style={{ borderColor }}>
-          <TooltipTrigger>
-            <ActionButton isQuiet aria-label="Zoom in" onPress={() => void reactFlow.zoomIn({ duration: 200 })}>
-              <span style={{ color: buttonColor, fontWeight: 700, fontSize: 20, lineHeight: 1 }}>+</span>
-            </ActionButton>
-            <Tooltip>Zoom in</Tooltip>
-          </TooltipTrigger>
-        </div>
-        <div className={toolbarButtonWrapClassName} style={{ borderColor }}>
-          <TooltipTrigger>
-            <ActionButton isQuiet aria-label="Zoom out" onPress={() => void reactFlow.zoomOut({ duration: 200 })}>
-              <span style={{ color: buttonColor, fontWeight: 700, fontSize: 20, lineHeight: 1 }}>−</span>
-            </ActionButton>
-            <Tooltip>Zoom out</Tooltip>
-          </TooltipTrigger>
-        </div>
-        <div className={toolbarButtonWrapClassName} style={{ borderColor }}>
-          <TooltipTrigger>
-            <ActionButton
-              isQuiet
-              aria-label="Fit view"
-              onPress={() => void reactFlow.fitView({ padding: 0.25, duration: 260 })}
-            >
-              <span style={{ color: buttonColor, fontWeight: 700, fontSize: 15, lineHeight: 1 }}>[]</span>
-            </ActionButton>
-            <Tooltip>Fit view</Tooltip>
-          </TooltipTrigger>
-        </div>
-        <div className={toolbarButtonWrapClassName} style={{ borderColor, borderBottomWidth: 0 }}>
-          <TooltipTrigger>
-            <ActionButton isQuiet aria-label="Reset zoom" onPress={() => void reactFlow.zoomTo(1, { duration: 220 })}>
-              <span style={{ color: buttonColor, fontWeight: 700, fontSize: 14, lineHeight: 1, fontVariantNumeric: 'tabular-nums' }}>1:1</span>
-            </ActionButton>
-            <Tooltip>Reset zoom</Tooltip>
-          </TooltipTrigger>
-        </div>
-      </div>
+    <Panel position="top-right">
+      <ActionButtonGroup
+        aria-label="UML graph controls"
+        orientation="horizontal"
+        density="compact"
+      >
+        <TooltipTrigger>
+          <ActionButton aria-label="Zoom in" onPress={() => void reactFlow.zoomIn({ duration: 200 })}>
+            <ZoomIn />
+          </ActionButton>
+          <Tooltip>Zoom in</Tooltip>
+        </TooltipTrigger>
+        <TooltipTrigger>
+          <ActionButton aria-label="Zoom out" onPress={() => void reactFlow.zoomOut({ duration: 200 })}>
+            <ZoomOut />
+          </ActionButton>
+          <Tooltip>Zoom out</Tooltip>
+        </TooltipTrigger>
+        <TooltipTrigger>
+          <ActionButton
+            aria-label="Fit view"
+            onPress={() => void reactFlow.fitView({ padding: 0.25, duration: 260 })}
+          >
+            <Maximize />
+          </ActionButton>
+          <Tooltip>Fit view</Tooltip>
+        </TooltipTrigger>
+        <TooltipTrigger>
+          <ActionButton aria-label="Reset zoom" onPress={() => void reactFlow.zoomTo(1, { duration: 220 })}>
+            <AlignCenter />
+          </ActionButton>
+          <Tooltip>Reset zoom</Tooltip>
+        </TooltipTrigger>
+      </ActionButtonGroup>
     </Panel>
   );
 };
@@ -296,7 +268,7 @@ export const UmlPage = () => {
           borderRadius: 'xl',
           overflow: 'hidden',
           minHeight: 520,
-          backgroundColor: 'gray-100',
+          backgroundColor: 'layer-1',
         })}
       >
         <ReactFlow
@@ -304,6 +276,7 @@ export const UmlPage = () => {
           edges={edges}
           nodeTypes={nodeTypes}
           colorMode={theme}
+          proOptions={{ hideAttribution: true }}
           fitView
           minZoom={0.5}
           maxZoom={1.75}
@@ -326,7 +299,7 @@ export const UmlPage = () => {
               return accent ? accentPalette[accent].fill : '#CFD6DE';
             }}
           />
-          <UmlFlowToolbar isDark={isDark} />
+          <UmlFlowToolbar />
           <Background gap={20} color={isDark ? '#90A0B6' : '#BAC3CF'} />
         </ReactFlow>
       </section>

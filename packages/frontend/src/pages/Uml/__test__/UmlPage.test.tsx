@@ -16,6 +16,7 @@ vi.mock('@react-spectrum/s2', () => {
 
   return {
     ActionButton: component('button'),
+    ActionButtonGroup: component('div'),
     ButtonGroup: component('div'),
     Divider: component('hr'),
     LinkButton: component('a'),
