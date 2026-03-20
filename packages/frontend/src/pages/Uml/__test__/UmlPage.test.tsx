@@ -3,6 +3,10 @@ import React from 'react';
 import { renderToStaticMarkup } from 'react-dom/server';
 import { describe, expect, it, vi } from 'vitest';
 
+vi.mock('src/providers/Theme', () => ({
+  useTheme: () => ({ theme: 'light', setTheme: vi.fn() }),
+}));
+
 vi.mock('@react-spectrum/s2', () => {
   const component = (tag: string) => {
     return ({ children, ...props }: React.PropsWithChildren<Record<string, unknown>>) => {
@@ -11,9 +15,12 @@ vi.mock('@react-spectrum/s2', () => {
   };
 
   return {
+    ActionButton: component('button'),
     ButtonGroup: component('div'),
     Divider: component('hr'),
     LinkButton: component('a'),
+    Tooltip: component('div'),
+    TooltipTrigger: component('div'),
   };
 });
 
@@ -32,12 +39,18 @@ vi.mock('@xyflow/react', () => {
 
   return {
     Background: () => null,
-    Controls: () => null,
     Handle: () => null,
     MarkerType: { ArrowClosed: 'arrowclosed' },
     MiniMap: () => null,
+    Panel: ({ children }: React.PropsWithChildren) => <div>{children}</div>,
     Position: { Left: 'left', Right: 'right' },
     ReactFlow,
+    useReactFlow: () => ({
+      zoomIn: vi.fn(),
+      zoomOut: vi.fn(),
+      fitView: vi.fn(),
+      zoomTo: vi.fn(),
+    }),
   };
 });
 

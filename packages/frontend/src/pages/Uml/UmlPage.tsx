@@ -1,23 +1,31 @@
-import { ButtonGroup, Divider, LinkButton } from '@react-spectrum/s2'
+import { ActionButton, ButtonGroup, Divider, LinkButton, Tooltip, TooltipTrigger } from '@react-spectrum/s2'
 import { style } from '@react-spectrum/s2/style' with { type: 'macro' }
 import {
   Background,
-  Controls,
   Handle,
   MarkerType,
   MiniMap,
+  Panel,
   Position,
   ReactFlow,
+  useReactFlow,
   type Edge,
   type Node,
   type NodeProps,
 } from '@xyflow/react'
 import '@xyflow/react/dist/style.css'
+import { useTheme } from 'src/providers/Theme';
 
 type UmlNodeData = {
   title: string;
   fields: string[];
   accent: 'indigo' | 'seafoam' | 'orange';
+};
+
+const accentPalette: Record<UmlNodeData['accent'], { fill: string; border: string }> = {
+  indigo: { fill: '#C8DAFF', border: '#4B5DC8' },
+  seafoam: { fill: '#C8F2EA', border: '#0A8F79' },
+  orange: { fill: '#FFDDB7', border: '#D96A00' },
 };
 
 const entityNodeClassName = style({
@@ -97,31 +105,40 @@ const nodes: Node<UmlNodeData>[] = [
     id: 'author',
     type: 'umlEntity',
     position: { x: 40, y: 120 },
+    width: 280,
+    height: 240,
     data: {
       title: 'Author',
       accent: 'indigo',
       fields: ['id: ID!', 'name: String!', 'bio: String!', 'country: String!', 'isActive: Boolean!', 'birthDate: Date!'],
     },
+    style: { width: 280, minHeight: 240 },
   },
   {
     id: 'book',
     type: 'umlEntity',
     position: { x: 440, y: 120 },
+    width: 280,
+    height: 240,
     data: {
       title: 'Book',
       accent: 'seafoam',
       fields: ['id: ID!', 'title: String!', 'description: String!', 'publicationDate: Date!', 'author: Author!', 'tags: [Tag!]!'],
     },
+    style: { width: 280, minHeight: 240 },
   },
   {
     id: 'tag',
     type: 'umlEntity',
     position: { x: 840, y: 120 },
+    width: 280,
+    height: 180,
     data: {
       title: 'Tag',
       accent: 'orange',
       fields: ['id: ID!', 'name: String!', 'books: [Book!]!'],
     },
+    style: { width: 280, minHeight: 180 },
   },
 ]
 
@@ -154,7 +171,84 @@ const edges: Edge[] = [
   },
 ]
 
+const toolbarContainerClassName = style({
+  display: 'flex',
+  flexDirection: 'column',
+  borderWidth: 1,
+  borderStyle: 'solid',
+  borderRadius: 'sm',
+  overflow: 'hidden',
+  boxShadow: 'elevated',
+});
+
+const toolbarButtonWrapClassName = style({
+  display: 'flex',
+  alignItems: 'center',
+  justifyContent: 'center',
+  width: 44,
+  height: 44,
+  paddingX: 2,
+  paddingY: 2,
+  borderWidth: 0,
+  borderBottomWidth: 1,
+  borderStyle: 'solid',
+});
+
+const UmlFlowToolbar = ({ isDark }: { isDark: boolean }) => {
+  const reactFlow = useReactFlow();
+
+  const borderColor = isDark ? '#4A5563' : '#CED5DD';
+  const backgroundColor = isDark ? '#232B34' : '#F8FAFC';
+  const buttonColor = isDark ? '#F8FAFC' : '#11181F';
+
+  return (
+    <Panel position="bottom-left">
+      <div className={toolbarContainerClassName} style={{ borderColor, backgroundColor }}>
+        <div className={toolbarButtonWrapClassName} style={{ borderColor }}>
+          <TooltipTrigger>
+            <ActionButton isQuiet aria-label="Zoom in" onPress={() => void reactFlow.zoomIn({ duration: 200 })}>
+              <span style={{ color: buttonColor, fontWeight: 700, fontSize: 20, lineHeight: 1 }}>+</span>
+            </ActionButton>
+            <Tooltip>Zoom in</Tooltip>
+          </TooltipTrigger>
+        </div>
+        <div className={toolbarButtonWrapClassName} style={{ borderColor }}>
+          <TooltipTrigger>
+            <ActionButton isQuiet aria-label="Zoom out" onPress={() => void reactFlow.zoomOut({ duration: 200 })}>
+              <span style={{ color: buttonColor, fontWeight: 700, fontSize: 20, lineHeight: 1 }}>−</span>
+            </ActionButton>
+            <Tooltip>Zoom out</Tooltip>
+          </TooltipTrigger>
+        </div>
+        <div className={toolbarButtonWrapClassName} style={{ borderColor }}>
+          <TooltipTrigger>
+            <ActionButton
+              isQuiet
+              aria-label="Fit view"
+              onPress={() => void reactFlow.fitView({ padding: 0.25, duration: 260 })}
+            >
+              <span style={{ color: buttonColor, fontWeight: 700, fontSize: 15, lineHeight: 1 }}>[]</span>
+            </ActionButton>
+            <Tooltip>Fit view</Tooltip>
+          </TooltipTrigger>
+        </div>
+        <div className={toolbarButtonWrapClassName} style={{ borderColor, borderBottomWidth: 0 }}>
+          <TooltipTrigger>
+            <ActionButton isQuiet aria-label="Reset zoom" onPress={() => void reactFlow.zoomTo(1, { duration: 220 })}>
+              <span style={{ color: buttonColor, fontWeight: 700, fontSize: 14, lineHeight: 1, fontVariantNumeric: 'tabular-nums' }}>1:1</span>
+            </ActionButton>
+            <Tooltip>Reset zoom</Tooltip>
+          </TooltipTrigger>
+        </div>
+      </div>
+    </Panel>
+  );
+};
+
 export const UmlPage = () => {
+  const { theme } = useTheme();
+  const isDark = theme === 'dark';
+
   return (
     <main
       className={style({
@@ -209,6 +303,7 @@ export const UmlPage = () => {
           nodes={nodes}
           edges={edges}
           nodeTypes={nodeTypes}
+          colorMode={theme}
           fitView
           minZoom={0.5}
           maxZoom={1.75}
@@ -217,19 +312,22 @@ export const UmlPage = () => {
           <MiniMap
             pannable
             zoomable
-            maskColor="rgba(29, 30, 34, 0.16)"
+            position="bottom-right"
+            bgColor={isDark ? '#1D2228' : '#E5E7EB'}
+            maskColor={isDark ? 'rgba(248, 248, 248, 0.18)' : 'rgba(29, 30, 34, 0.16)'}
+            nodeBorderRadius={8}
+            nodeStrokeWidth={2}
+            nodeStrokeColor={(node) => {
+              const accent = (node.data as UmlNodeData | undefined)?.accent;
+              return accent ? accentPalette[accent].border : '#5B6470';
+            }}
             nodeColor={(node) => {
-              if (node.id === 'author') {
-                return '#C8DAFF';
-              }
-              if (node.id === 'book') {
-                return '#C8F2EA';
-              }
-              return '#FFDDB7';
+              const accent = (node.data as UmlNodeData | undefined)?.accent;
+              return accent ? accentPalette[accent].fill : '#CFD6DE';
             }}
           />
-          <Controls />
-          <Background gap={20} color="#BAC3CF" />
+          <UmlFlowToolbar isDark={isDark} />
+          <Background gap={20} color={isDark ? '#90A0B6' : '#BAC3CF'} />
         </ReactFlow>
       </section>
     </main>
