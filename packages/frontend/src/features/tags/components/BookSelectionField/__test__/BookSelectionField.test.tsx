@@ -1,4 +1,3 @@
-/* eslint-disable react/display-name */
 import React, { act, useEffect, useState } from 'react';
 import { createRoot, type Root } from 'react-dom/client';
 import { afterEach, describe, expect, it, vi } from 'vitest';
@@ -29,7 +28,8 @@ vi.mock('@react-spectrum/s2', () => {
     children,
     ...props
   }: React.PropsWithChildren<Record<string, unknown>>) => {
-    const { textValue: _textValue, ...rest } = props;
+    const rest = { ...props };
+    delete (rest as { textValue?: string }).textValue;
     return React.createElement('option', rest, children);
   };
 
@@ -51,7 +51,8 @@ vi.mock('@react-spectrum/s2', () => {
     children,
     ...props
   }: React.PropsWithChildren<Record<string, unknown>>) => {
-    const { textValue: _textValue, ...rest } = props;
+    const rest = { ...props };
+    delete (rest as { textValue?: string }).textValue;
     return React.createElement('span', rest, children);
   };
 

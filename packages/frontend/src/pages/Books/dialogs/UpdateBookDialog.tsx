@@ -63,9 +63,12 @@ export const UpdateBookDialog = ({ bookId, onCompleted, tags = [], authors = [] 
 
   const title = draftTitle ?? book?.title ?? '';
   const description = draftDescription ?? book?.description ?? '';
-  const selectedAuthor = draftAuthor ?? (book?.author
-    ? { id: book.author.id, label: book.author.name }
-    : null);
+  const selectedAuthor = useMemo(
+    () => draftAuthor ?? (book?.author
+      ? { id: book.author.id, label: book.author.name }
+      : null),
+    [draftAuthor, book],
+  );
   const authorName = selectedAuthor?.label ?? '';
   const authorInputText = authorInputValue ?? authorName;
   const availableAuthors = useMemo(() => {

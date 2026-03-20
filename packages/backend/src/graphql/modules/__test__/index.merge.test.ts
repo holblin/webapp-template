@@ -3,13 +3,11 @@ import { afterEach, describe, expect, it, vi } from 'vitest';
 describe('graphql modules index merge', () => {
   afterEach(() => {
     vi.resetModules();
-    vi.unmock('../author/authorModule.js');
-    vi.unmock('../book/bookModule.js');
-    vi.unmock('../tag/tagModule.js');
-    vi.unmock('../shared/sharedModule.js');
   });
 
   it('skips modules without domainResolvers and still merges valid modules', async () => {
+    vi.resetModules();
+
     vi.doMock('../author/authorModule.js', () => ({
       typeDefs: 'type Author { id: ID! }',
       domainResolvers: undefined,
@@ -38,13 +36,12 @@ describe('graphql modules index merge', () => {
     }));
 
     const module = await import('../index.js');
+    const mergedTypeDefs = module.typeDefs.join('\n');
 
-    expect(module.typeDefs).toEqual(expect.arrayContaining([
-      'scalar Date',
-      'type Query { mockedBookById: ID }',
-      'type Author { id: ID! }',
-      'type Mutation { mockedDeleteTag: Boolean! }',
-    ]));
+    expect(mergedTypeDefs).toContain('scalar Date');
+    expect(mergedTypeDefs).toContain('type Query { mockedBookById: ID }');
+    expect(mergedTypeDefs).toContain('type Author { id: ID! }');
+    expect(mergedTypeDefs).toContain('type Mutation { mockedDeleteTag: Boolean! }');
 
     const query = module.resolvers.Query as Record<string, unknown> | undefined;
     const mutation = module.resolvers.Mutation as Record<string, unknown> | undefined;

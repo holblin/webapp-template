@@ -32,7 +32,7 @@ const accentPalette: Record<UmlNodeData['accent'], { fill: string; border: strin
   orange: { fill: '#FFDDB7', border: '#D96A00' },
 };
 
-const entityNodeClassName = style({
+const entityNodeStyle = {
   width: 260,
   borderRadius: 'xl',
   borderWidth: 2,
@@ -43,28 +43,13 @@ const entityNodeClassName = style({
   display: 'flex',
   flexDirection: 'column',
   gap: 8,
-});
+} as const;
 
-const entityNodeAccentClassNames: Record<UmlNodeData['accent'], string> = {
-  indigo: style({
-    backgroundColor: 'indigo-100',
-    borderColor: 'indigo-800',
-  }),
-  seafoam: style({
-    backgroundColor: 'seafoam-100',
-    borderColor: 'seafoam-800',
-  }),
-  orange: style({
-    backgroundColor: 'orange-100',
-    borderColor: 'orange-800',
-  }),
-};
-
-const entityTitleClassName = style({
+const entityTitleStyle = {
   font: 'heading-sm',
-});
+} as const;
 
-const entityFieldListClassName = style({
+const entityFieldListStyle = {
   marginY: 0,
   marginX: 0,
   paddingStart: 16,
@@ -72,26 +57,32 @@ const entityFieldListClassName = style({
   display: 'flex',
   flexDirection: 'column',
   gap: 4,
-});
+} as const;
 
-const handleClassName = style({
+const handleStyle = {
   width: 10,
   height: 10,
   borderWidth: 2,
   borderStyle: 'solid',
   borderColor: 'gray-900',
   backgroundColor: 'gray-200',
-});
+} as const;
 
 const UmlEntityNode = ({ data }: NodeProps<Node<UmlNodeData>>) => {
   const typedData = data as UmlNodeData;
 
   return (
-    <div className={`${entityNodeClassName} ${entityNodeAccentClassNames[typedData.accent]}`}>
-      <Handle type="target" position={Position.Left} className={handleClassName} />
-      <Handle type="source" position={Position.Right} className={handleClassName} />
-      <strong className={entityTitleClassName}>{typedData.title}</strong>
-      <ul className={entityFieldListClassName}>
+    <div className={`${style(entityNodeStyle)} ${
+      typedData.accent === 'indigo'
+        ? style({ backgroundColor: 'indigo-100', borderColor: 'indigo-800' })
+        : typedData.accent === 'seafoam'
+          ? style({ backgroundColor: 'seafoam-100', borderColor: 'seafoam-800' })
+          : style({ backgroundColor: 'orange-100', borderColor: 'orange-800' })
+    }`}>
+      <Handle type="target" position={Position.Left} className={style(handleStyle)} />
+      <Handle type="source" position={Position.Right} className={style(handleStyle)} />
+      <strong className={style(entityTitleStyle)}>{typedData.title}</strong>
+      <ul className={style(entityFieldListStyle)}>
         {typedData.fields.map((field) => (
           <li key={field}>{field}</li>
         ))}
@@ -102,6 +93,42 @@ const UmlEntityNode = ({ data }: NodeProps<Node<UmlNodeData>>) => {
 
 const nodeTypes = {
   umlEntity: UmlEntityNode,
+} as const;
+
+const pageStyle = {
+  width: 'full',
+  flexGrow: 1,
+  minHeight: 0,
+  overflowY: 'auto',
+  padding: 24,
+  display: 'flex',
+  flexDirection: 'column',
+  gap: 16,
+} as const;
+
+const introSectionStyle = {
+  borderWidth: 1,
+  borderStyle: 'solid',
+  borderColor: 'gray-300',
+  borderRadius: 'xl',
+  padding: 20,
+  display: 'flex',
+  flexDirection: 'column',
+  gap: 12,
+  backgroundColor: 'gray-50',
+} as const;
+
+const pageTitleStyle = { marginY: 0, font: 'heading-lg' } as const;
+const introTextStyle = { marginY: 0, font: 'body-sm', color: 'gray-800' } as const;
+
+const graphSectionStyle = {
+  borderWidth: 1,
+  borderStyle: 'solid',
+  borderColor: 'gray-300',
+  borderRadius: 'xl',
+  overflow: 'hidden',
+  minHeight: 520,
+  backgroundColor: 'layer-1',
 } as const;
 
 const nodes: Node<UmlNodeData>[] = [
@@ -222,33 +249,10 @@ export const UmlPage = () => {
   const isDark = theme === 'dark';
 
   return (
-    <main
-      className={style({
-        width: 'full',
-        flexGrow: 1,
-        minHeight: 0,
-        overflowY: 'auto',
-        padding: 24,
-        display: 'flex',
-        flexDirection: 'column',
-        gap: 16,
-      })}
-    >
-      <section
-        className={style({
-          borderWidth: 1,
-          borderStyle: 'solid',
-          borderColor: 'gray-300',
-          borderRadius: 'xl',
-          padding: 20,
-          display: 'flex',
-          flexDirection: 'column',
-          gap: 12,
-          backgroundColor: 'gray-50',
-        })}
-      >
-        <h1 className={style({ marginY: 0, font: 'heading-lg' })}>UML Domain Graph</h1>
-        <p className={style({ marginY: 0, font: 'body-sm', color: 'gray-800' })}>
+    <main className={style(pageStyle)}>
+      <section className={style(introSectionStyle)}>
+        <h1 className={style(pageTitleStyle)}>UML Domain Graph</h1>
+        <p className={style(introTextStyle)}>
           Graph generated from your current GraphQL model: each Book has exactly one Author, and Book/Tag is many-to-many.
         </p>
         <ButtonGroup>
@@ -260,17 +264,7 @@ export const UmlPage = () => {
 
       <Divider />
 
-      <section
-        className={style({
-          borderWidth: 1,
-          borderStyle: 'solid',
-          borderColor: 'gray-300',
-          borderRadius: 'xl',
-          overflow: 'hidden',
-          minHeight: 520,
-          backgroundColor: 'layer-1',
-        })}
-      >
+      <section className={style(graphSectionStyle)}>
         <ReactFlow
           nodes={nodes}
           edges={edges}
