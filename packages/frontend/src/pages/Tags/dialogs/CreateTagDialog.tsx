@@ -10,16 +10,18 @@ import {
   ToastQueue,
 } from '@react-spectrum/s2';
 import { useState } from 'react';
-import { toUniqueCsvValues } from 'src/features/inventory/csv';
+import { BookSelectionField } from 'src/features/tags/components/BookSelectionField/BookSelectionField';
+import type { SelectionOption } from 'src/features/tags/components/BookSelectionField/BookSelectionField.types';
 import { TAG_CREATE_MUTATION } from './CreateTagDialog.graphql';
 
 type CreateTagDialogProps = {
   onCompleted?: () => void;
+  books?: SelectionOption[];
 };
 
-export const CreateTagDialog = ({ onCompleted }: CreateTagDialogProps) => {
+export const CreateTagDialog = ({ onCompleted, books = [] }: CreateTagDialogProps) => {
   const [name, setName] = useState('');
-  const [bookIdsRaw, setBookIdsRaw] = useState('');
+  const [selectedBooks, setSelectedBooks] = useState<SelectionOption[]>([]);
   const [tagCreate, { loading }] = useMutation(TAG_CREATE_MUTATION);
 
   return (
@@ -30,10 +32,10 @@ export const CreateTagDialog = ({ onCompleted }: CreateTagDialogProps) => {
           <Content>
             <Form>
               <TextField label="Name" value={name} onChange={setName} isRequired />
-              <TextField
-                label="Book ids (comma-separated)"
-                value={bookIdsRaw}
-                onChange={setBookIdsRaw}
+              <BookSelectionField
+                options={books}
+                selectedOptions={selectedBooks}
+                onSelectedOptionsChange={setSelectedBooks}
               />
             </Form>
           </Content>
@@ -50,7 +52,7 @@ export const CreateTagDialog = ({ onCompleted }: CreateTagDialogProps) => {
                   return;
                 }
 
-                const bookIds = toUniqueCsvValues(bookIdsRaw);
+                const bookIds = selectedBooks.map((book) => book.id);
 
                 try {
                   await tagCreate({

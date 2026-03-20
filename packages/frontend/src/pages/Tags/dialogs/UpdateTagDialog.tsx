@@ -10,7 +10,8 @@ import {
   ToastQueue,
 } from '@react-spectrum/s2';
 import { useMemo, useState } from 'react';
-import { toUniqueCsvValues } from 'src/features/inventory/csv';
+import { BookSelectionField } from 'src/features/tags/components/BookSelectionField/BookSelectionField';
+import type { SelectionOption } from 'src/features/tags/components/BookSelectionField/BookSelectionField.types';
 import {
   TAG_BY_ID_QUERY,
   TAG_DIALOG_FRAGMENT,
@@ -20,11 +21,12 @@ import {
 type UpdateTagDialogProps = {
   tagId: string;
   onCompleted?: () => void;
+  books?: SelectionOption[];
 };
 
-export const UpdateTagDialog = ({ tagId, onCompleted }: UpdateTagDialogProps) => {
+export const UpdateTagDialog = ({ tagId, onCompleted, books = [] }: UpdateTagDialogProps) => {
   const [draftName, setDraftName] = useState<string | null>(null);
-  const [draftBookIdsRaw, setDraftBookIdsRaw] = useState<string | null>(null);
+  const [draftBooks, setDraftBooks] = useState<SelectionOption[] | null>(null);
 
   const { data: fragmentData, complete } = useFragment({
     fragment: TAG_DIALOG_FRAGMENT,
@@ -49,7 +51,26 @@ export const UpdateTagDialog = ({ tagId, onCompleted }: UpdateTagDialogProps) =>
   }, [complete, fragmentData, queryData]);
 
   const name = draftName ?? tag?.name ?? '';
-  const bookIdsRaw = draftBookIdsRaw ?? (tag?.books ?? []).map((book) => book.id).join(', ');
+  const selectedBooks = draftBooks ?? (tag?.books ?? []).map((book) => ({
+    id: book.id,
+    label: book.title,
+  }));
+
+  const availableBooks = useMemo(() => {
+    const byId = new Map<string, SelectionOption>();
+
+    for (const book of books) {
+      byId.set(book.id, book);
+    }
+
+    for (const book of selectedBooks) {
+      if (!byId.has(book.id)) {
+        byId.set(book.id, book);
+      }
+    }
+
+    return Array.from(byId.values());
+  }, [books, selectedBooks]);
 
   const [tagUpdate, { loading: isSaving }] = useMutation(TAG_UPDATE_MUTATION);
 
@@ -67,10 +88,10 @@ export const UpdateTagDialog = ({ tagId, onCompleted }: UpdateTagDialogProps) =>
                 isRequired
                 isDisabled={isLoadingTag || !tag}
               />
-              <TextField
-                label="Book ids (comma-separated)"
-                value={bookIdsRaw}
-                onChange={setDraftBookIdsRaw}
+              <BookSelectionField
+                options={availableBooks}
+                selectedOptions={selectedBooks}
+                onSelectedOptionsChange={(nextBooks) => setDraftBooks(nextBooks)}
                 isDisabled={isLoadingTag || !tag}
               />
             </Form>
@@ -89,7 +110,7 @@ export const UpdateTagDialog = ({ tagId, onCompleted }: UpdateTagDialogProps) =>
                   return;
                 }
 
-                const bookIds = toUniqueCsvValues(bookIdsRaw);
+                const bookIds = selectedBooks.map((book) => book.id);
 
                 try {
                   await tagUpdate({

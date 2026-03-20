@@ -113,6 +113,44 @@ const getOrCreateAuthorId = (authorName: string, context: GraphQLContext): strin
   return author.id;
 };
 
+const normalizeTagIds = (tagIds: readonly string[]): string[] => [...new Set(tagIds)];
+
+const assertTagsExist = (tagIds: readonly string[], context: GraphQLContext) => {
+  for (const tagId of tagIds) {
+    if (!context.apiClient.tag.getById(tagId)) {
+      throw new GraphQLError(`Tag "${tagId}" does not exist.`, {
+        extensions: { code: 'BAD_USER_INPUT' },
+      });
+    }
+  }
+};
+
+const syncBookTags = (bookId: string, nextTagIds: readonly string[], context: GraphQLContext) => {
+  const nextTagIdSet = new Set(nextTagIds);
+
+  for (const tag of context.apiClient.tag.list()) {
+    const hasBook = tag.bookIds.includes(bookId);
+    const shouldHaveBook = nextTagIdSet.has(tag.id);
+
+    if (shouldHaveBook && !hasBook) {
+      context.apiClient.tag.update({
+        id: tag.id,
+        name: tag.name,
+        bookIds: [...tag.bookIds, bookId],
+      });
+      continue;
+    }
+
+    if (!shouldHaveBook && hasBook) {
+      context.apiClient.tag.update({
+        id: tag.id,
+        name: tag.name,
+        bookIds: tag.bookIds.filter((existingBookId) => existingBookId !== bookId),
+      });
+    }
+  }
+};
+
 const toStoredPublicationDate = (value: Date | string): string => {
   if (value instanceof Date) {
     if (Number.isNaN(value.getTime())) {
@@ -164,6 +202,9 @@ const mutationResolvers: Pick<MutationResolvers, 'bookCreate' | 'bookUpdate' | '
         extensions: { code: 'BAD_USER_INPUT' },
       });
     }
+    const requestedTagIds = normalizeTagIds(args.input.tagIds ?? []);
+    assertTagsExist(requestedTagIds, context);
+
     const newBookRecord = {
       id: randomUUID(),
       title,
@@ -175,6 +216,7 @@ const mutationResolvers: Pick<MutationResolvers, 'bookCreate' | 'bookUpdate' | '
     };
 
     context.apiClient.book.add(newBookRecord);
+    syncBookTags(newBookRecord.id, requestedTagIds, context);
 
     return {
       code: '200',
@@ -219,6 +261,15 @@ const mutationResolvers: Pick<MutationResolvers, 'bookCreate' | 'bookUpdate' | '
         }
         return getOrCreateAuthorId(nextAuthorName, context);
       })();
+    const currentTagIds = context.apiClient.tag
+      .list()
+      .filter((tag) => tag.bookIds.includes(currentBook.id))
+      .map((tag) => tag.id);
+    const nextTagIds = args.input.tagIds === undefined
+      ? currentTagIds
+      : normalizeTagIds(args.input.tagIds);
+
+    assertTagsExist(nextTagIds, context);
 
     const updatedBook = context.apiClient.book.update({
       id: currentBook.id,
@@ -235,6 +286,8 @@ const mutationResolvers: Pick<MutationResolvers, 'bookCreate' | 'bookUpdate' | '
         extensions: { code: 'BAD_USER_INPUT' },
       });
     }
+
+    syncBookTags(updatedBook.id, nextTagIds, context);
 
     return {
       code: '200',

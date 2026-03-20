@@ -19,6 +19,10 @@ export const BOOK_DIALOG_FRAGMENT = graphql(`
       id
       name
     }
+    tags {
+      id
+      name
+    }
   }
 `);
 
@@ -30,6 +34,10 @@ export const BOOK_BY_ID_QUERY = graphql(`
       description
       publicationDate
       author {
+        id
+        name
+      }
+      tags {
         id
         name
       }

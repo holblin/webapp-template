@@ -2,6 +2,8 @@ import { useMutation } from '@apollo/client/react';
 import {
   Button,
   ButtonGroup,
+  ComboBox,
+  ComboBoxItem,
   Content,
   DatePicker,
   Dialog,
@@ -11,21 +13,35 @@ import {
   TextField,
   ToastQueue,
 } from '@react-spectrum/s2';
-import { useState } from 'react';
+import { type Key, useMemo, useState } from 'react';
 import { toCalendarDate } from 'src/features/inventory/date';
+import { BookSelectionField } from 'src/features/tags/components/BookSelectionField/BookSelectionField';
+import type { SelectionOption } from 'src/features/tags/components/BookSelectionField/BookSelectionField.types';
 import { BOOK_CREATE_MUTATION } from './CreateBookDialog.graphql';
 import { getBookDialogRequiredFieldError } from './bookDialogRequiredFields';
 
 type CreateBookDialogProps = {
   onCompleted?: () => void;
+  tags?: SelectionOption[];
+  authors?: SelectionOption[];
 };
 
-export const CreateBookDialog = ({ onCompleted }: CreateBookDialogProps) => {
+export const CreateBookDialog = ({ onCompleted, tags = [], authors = [] }: CreateBookDialogProps) => {
   const [title, setTitle] = useState('');
   const [description, setDescription] = useState('');
   const [publicationDate, setPublicationDate] = useState('');
-  const [authorName, setAuthorName] = useState('');
+  const [selectedAuthor, setSelectedAuthor] = useState<SelectionOption | null>(null);
+  const [authorInputValue, setAuthorInputValue] = useState('');
+  const [selectedTags, setSelectedTags] = useState<SelectionOption[]>([]);
   const [bookCreate, { loading }] = useMutation(BOOK_CREATE_MUTATION);
+  const availableAuthors = useMemo(() => {
+    const query = authorInputValue.trim().toLowerCase();
+    if (!query) {
+      return authors;
+    }
+
+    return authors.filter((author) => author.label.toLowerCase().includes(query));
+  }, [authors, authorInputValue]);
 
   return (
     <Dialog>
@@ -36,12 +52,49 @@ export const CreateBookDialog = ({ onCompleted }: CreateBookDialogProps) => {
             <Form>
               <TextField label="Title" value={title} onChange={setTitle} isRequired />
               <TextArea label="Description" value={description} onChange={setDescription} isRequired />
-              <TextField label="Author" value={authorName} onChange={setAuthorName} isRequired />
+              <ComboBox
+                label="Author"
+                placeholder="Search and select an author"
+                items={availableAuthors}
+                inputValue={authorInputValue}
+                onInputChange={(value) => {
+                  setAuthorInputValue(value);
+                  if (selectedAuthor && value !== selectedAuthor.label) {
+                    setSelectedAuthor(null);
+                  }
+                }}
+                onSelectionChange={(key: Key | null) => {
+                  if (key == null) {
+                    setSelectedAuthor(null);
+                    return;
+                  }
+                  const selectedId = String(key);
+                  const author = authors.find((entry) => entry.id === selectedId) ?? null;
+                  setSelectedAuthor(author);
+                  setAuthorInputValue(author?.label ?? '');
+                }}
+                isRequired
+              >
+                {(item) => (
+                  <ComboBoxItem id={item.id} textValue={item.label}>
+                    {item.label}
+                  </ComboBoxItem>
+                )}
+              </ComboBox>
               <DatePicker
                 label="Publication date"
                 value={toCalendarDate(publicationDate)}
                 onChange={(value) => setPublicationDate(value?.toString() ?? '')}
                 isRequired
+              />
+              <BookSelectionField
+                options={tags}
+                selectedOptions={selectedTags}
+                onSelectedOptionsChange={setSelectedTags}
+                fieldLabel="Tags"
+                selectedLabel="Selected tags"
+                placeholder="Search and add a tag"
+                emptyStateMessage="No tags selected."
               />
             </Form>
           </Content>
@@ -56,7 +109,7 @@ export const CreateBookDialog = ({ onCompleted }: CreateBookDialogProps) => {
                 const requiredFieldError = getBookDialogRequiredFieldError({
                   title,
                   description,
-                  authorName,
+                  authorName: selectedAuthor?.label ?? '',
                   publicationDate,
                 });
 
@@ -72,7 +125,8 @@ export const CreateBookDialog = ({ onCompleted }: CreateBookDialogProps) => {
                         title: title.trim(),
                         description: description.trim(),
                         publicationDate: publicationDate.trim(),
-                        author: authorName.trim(),
+                        author: (selectedAuthor?.label ?? '').trim(),
+                        tagIds: selectedTags.map((tag) => tag.id),
                       },
                     },
                     refetchQueries: 'active',

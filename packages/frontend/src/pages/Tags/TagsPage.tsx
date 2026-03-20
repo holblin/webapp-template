@@ -11,6 +11,7 @@ import {
   createTagInventoryColumns,
   type TagInventoryRow,
 } from 'src/features/tags/columns/tagInventoryColumns';
+import type { SelectionOption } from 'src/features/tags/components/BookSelectionField/BookSelectionField.types';
 import { TagFiltersPanel } from 'src/features/tags/filters/TagFiltersPanel';
 import {
   TAG_FILTER_OPTIONS_QUERY,
@@ -69,7 +70,11 @@ export const TagsPage = () => {
   );
 
   const { data: optionsData } = useQuery(TAG_FILTER_OPTIONS_QUERY);
-  const books = (optionsData?.bookList.edges ?? []).map((edge) => edge.node);
+  const booksForFilters = (optionsData?.bookList.edges ?? []).map((edge) => edge.node);
+  const bookOptions: SelectionOption[] = booksForFilters.map((book) => ({
+    id: book.id,
+    label: book.title,
+  }));
 
   return (
     <InventoryCrudLayout<TagInventoryRow, TagPageSearch, TagFilters, string>
@@ -83,12 +88,12 @@ export const TagsPage = () => {
       getRowId={(row) => row.cursor}
       ariaLabel="Tags table"
       getFilters={getTagFilters}
-      getActiveFilters={(state) => getTagActiveFilters(state, books)}
+      getActiveFilters={(state) => getTagActiveFilters(state, booksForFilters)}
       clearFiltersPatch={clearTagFiltersPatch}
       renderFilterPanel={(filters, onFiltersChange) => (
         <TagFiltersPanel
           filters={filters}
-          books={books}
+          books={booksForFilters}
           onFiltersChange={onFiltersChange}
         />
       )}
@@ -104,10 +109,10 @@ export const TagsPage = () => {
       }}
       onRefresh={refresh}
       renderCreateDialog={(onCompleted) => (
-        <CreateTagDialog onCompleted={onCompleted} />
+        <CreateTagDialog onCompleted={onCompleted} books={bookOptions} />
       )}
       renderUpdateDialog={(tagId, onCompleted) => (
-        <UpdateTagDialog tagId={tagId} onCompleted={onCompleted} />
+        <UpdateTagDialog tagId={tagId} onCompleted={onCompleted} books={bookOptions} />
       )}
       renderDeleteDialog={(tagId, onCompleted) => (
         <DeleteTagDialog tagId={tagId} onCompleted={onCompleted} />

@@ -69,6 +69,15 @@ describe('bookModule resolvers', () => {
         author: 'Someone',
       },
     }, context)).toThrowError('Publication date is invalid.');
+    expect(() => runResolver(mutation.bookCreate, {}, {
+      input: {
+        title: 'Valid',
+        description: 'Desc',
+        publicationDate: '2020-01-01',
+        author: 'Someone',
+        tagIds: ['tag-missing'],
+      },
+    }, context)).toThrowError('does not exist');
 
     const uniqueAuthor = `Book Author ${Date.now()}`;
     const created = runResolver(mutation.bookCreate, {}, {
@@ -77,6 +86,7 @@ describe('bookModule resolvers', () => {
         description: 'Created book',
         publicationDate: '2020-01-01',
         author: uniqueAuthor,
+        tagIds: ['tag-1', 'tag-2', 'tag-1'],
       },
     }, context);
 
@@ -88,6 +98,10 @@ describe('bookModule resolvers', () => {
       },
     });
     expect(context.apiClient.author.getByName(uniqueAuthor)).not.toBeNull();
+    const createdBookId = (created as { book?: { id?: string } }).book?.id;
+    expect(createdBookId).toBeDefined();
+    expect(context.apiClient.tag.getById('tag-1')?.bookIds).toContain(createdBookId);
+    expect(context.apiClient.tag.getById('tag-2')?.bookIds).toContain(createdBookId);
   });
 
   it('validates and updates books', () => {
@@ -115,6 +129,12 @@ describe('bookModule resolvers', () => {
         author: ' ',
       },
     }, context)).toThrowError('Author must not be empty.');
+    expect(() => runResolver(mutation.bookUpdate, {}, {
+      input: {
+        id: 'book-1',
+        tagIds: ['tag-missing'],
+      },
+    }, context)).toThrowError('does not exist');
 
     const updated = runResolver(mutation.bookUpdate, {}, {
       input: {
@@ -122,6 +142,7 @@ describe('bookModule resolvers', () => {
         title: 'The Awakening Updated',
         description: 'Updated description',
         publicationDate: '1899-04-22',
+        tagIds: ['tag-2'],
       },
     }, context);
 
@@ -133,6 +154,8 @@ describe('bookModule resolvers', () => {
         title: 'The Awakening Updated',
       },
     });
+    expect(context.apiClient.tag.getById('tag-1')?.bookIds).not.toContain('book-1');
+    expect(context.apiClient.tag.getById('tag-2')?.bookIds).toContain('book-1');
   });
 
   it('deletes books and removes references from tags', () => {

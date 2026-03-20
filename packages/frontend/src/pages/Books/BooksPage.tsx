@@ -7,6 +7,7 @@ import {
   type BooksPageQueryQueryVariables,
 } from 'src/__generated__/gql/graphql';
 import { InventoryCrudLayout } from 'src/components/Inventory/InventoryCrudLayout';
+import type { SelectionOption } from 'src/features/tags/components/BookSelectionField/BookSelectionField.types';
 import {
   clearBookFiltersPatch,
   defaultBookPageSearch,
@@ -65,6 +66,14 @@ export const BooksPage = () => {
   const { data: optionsData } = useQuery(BOOK_FILTER_OPTIONS_QUERY);
   const authors = (optionsData?.authorList.edges ?? []).map((edge) => edge.node);
   const tags = (optionsData?.tagList.edges ?? []).map((edge) => edge.node);
+  const authorOptions: SelectionOption[] = authors.map((author) => ({
+    id: author.id,
+    label: author.name,
+  }));
+  const tagOptions: SelectionOption[] = tags.map((tag) => ({
+    id: tag.id,
+    label: tag.name,
+  }));
 
   return (
     <InventoryCrudLayout<BookInventoryRow, BookPageSearch, BookFilters, string>
@@ -100,10 +109,15 @@ export const BooksPage = () => {
       }}
       onRefresh={refresh}
       renderCreateDialog={(onCompleted) => (
-        <CreateBookDialog onCompleted={onCompleted} />
+        <CreateBookDialog onCompleted={onCompleted} tags={tagOptions} authors={authorOptions} />
       )}
       renderUpdateDialog={(bookId, onCompleted) => (
-        <UpdateBookDialog bookId={bookId} onCompleted={onCompleted} />
+        <UpdateBookDialog
+          bookId={bookId}
+          onCompleted={onCompleted}
+          tags={tagOptions}
+          authors={authorOptions}
+        />
       )}
       renderDeleteDialog={(bookId, onCompleted) => (
         <DeleteBookDialog bookId={bookId} onCompleted={onCompleted} />

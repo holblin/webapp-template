@@ -17,6 +17,9 @@ if (process.env.CHROMATIC === 'true' || process.env.CHROMATIC_PROJECT_TOKEN) {
 const config: StorybookConfig = {
   stories: ['../src/**/*.stories.@(ts|tsx)'],
   addons,
+  typescript: {
+    reactDocgen: false,
+  },
   framework: {
     name: '@storybook/react-vite',
     options: {},
@@ -26,6 +29,9 @@ const config: StorybookConfig = {
   },
   async viteFinal(baseConfig) {
     return mergeConfig(baseConfig, {
+      server: {
+        hmr: false,
+      },
       resolve: {
         alias: {
           src: fileURLToPath(new URL('../src', import.meta.url)),

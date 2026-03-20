@@ -42,6 +42,8 @@ vi.mock('@react-spectrum/s2', () => {
   return {
     Button: button,
     ButtonGroup: component('div'),
+    ComboBox: component('div'),
+    ComboBoxItem: component('option'),
     Column: component('th'),
     Content: component('div'),
     DatePicker: component('div'),
@@ -55,6 +57,8 @@ vi.mock('@react-spectrum/s2', () => {
     TableBody: component('tbody'),
     TableHeader: component('thead'),
     TableView: tableView,
+    Tag: component('span'),
+    TagGroup: component('div'),
     TextArea: component('textarea'),
     TextField: component('input'),
     ActionButton: component('button'),

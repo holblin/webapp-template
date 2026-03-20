@@ -40,6 +40,7 @@ input BookCreateInput {
   description: String!
   publicationDate: Date!
   author: String!
+  tagIds: [ID!]
 }
 
 input BookUpdateInput {
@@ -48,6 +49,7 @@ input BookUpdateInput {
   description: String
   publicationDate: Date
   author: String
+  tagIds: [ID!]
 }
 
 input BookDeleteInput {
