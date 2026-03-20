@@ -37,7 +37,7 @@ const menus: ReadonlyArray<{
 
 type NavigationProps = {
   compact?: boolean;
-  onNavigate?: () => void;
+  onNavigate?: (selectedPath: string) => void;
 };
 
 export const Navigation = ({ compact = false, onNavigate }: NavigationProps) => {
@@ -68,12 +68,12 @@ export const Navigation = ({ compact = false, onNavigate }: NavigationProps) => 
         }
 
         window.open(selectedPath, '_blank', 'noopener,noreferrer');
-        onNavigate?.();
+        onNavigate?.(selectedPath);
         return;
       }
 
       navigate({ to: selectedPath as AppRoute })
-      onNavigate?.();
+      onNavigate?.(selectedPath);
     }}
     selectedKey={selectedRoute}
   >

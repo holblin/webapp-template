@@ -51,7 +51,7 @@ export const Header = ({ leadingAction }: HeaderProps) => {
         } else {
           setTheme('dark')
         }
-      }} >
+      }} aria-label={theme === 'dark' ? 'Switch to light theme' : 'Switch to dark theme'}>
         {theme == 'light' ? <IconLight /> : <IconDark />}
       </ActionButton>
     </div>

@@ -8,7 +8,7 @@
     "node": ">=24.11.0"
   },
   "scripts": {
-    "check": "npm run lint && npm run test:unit && npm run test:storybook && npm run e2e",
+    "check": "npm run lint && npm run lint:deps && npm run test:unit && npm run test:storybook && npm run e2e",
     "test": "npm run test:unit",
     "test:unit": "npm run generate && npm run test:unit --workspace webapp-template-backend && npm run test:unit --workspace webapp-template-frontend",
     "test:storybook": "npm run test:storybook --workspace webapp-template-frontend",
@@ -25,7 +25,9 @@
     "e2e:install": "playwright install --with-deps",
     "e2e:frontend-server": "npm run generate && npm run dev:e2e --workspace webapp-template-frontend",
     "typecheck": "npm run generate && npm run compile --workspace webapp-template-backend && npm run typecheck:test --workspace webapp-template-backend && npm run typecheck --workspace webapp-template-frontend",
-    "lint": "npm run typecheck && eslint",
+    "deps:check": "depcruise --config .dependency-cruiser.cjs \"packages/frontend/src/**/*.ts\" \"packages/frontend/src/**/*.tsx\"",
+    "lint": "npm run typecheck && npm run lint:deps && eslint",
+    "lint:deps": "npm run deps:check",
     "fix": "eslint --fix",
     "dev": "npm run generate && concurrently -k -n codegen,backend,frontend \"npm run codegen:watch\" \"npm run dev --workspace webapp-template-backend\" \"npm run dev --workspace webapp-template-frontend\"",
     "dev:all": "npm run generate && concurrently -k -n codegen,backend,frontend,storybook \"npm run codegen:watch\" \"npm run dev --workspace webapp-template-backend\" \"npm run dev --workspace webapp-template-frontend\" \"npm run storybook --workspace webapp-template-frontend\""
@@ -47,6 +49,7 @@
     "eslint-plugin-react": "^7.37.5",
     "eslint-plugin-react-hooks": "^7.0.1",
     "eslint-plugin-react-refresh": "^0.5.2",
+    "dependency-cruiser": "^17.1.0",
     "globals": "^17.4.0",
     "typescript-eslint": "^8.57.1",
     "vitest": "^4.1.0"

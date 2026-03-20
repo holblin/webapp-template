@@ -6,6 +6,7 @@ import { defineConfig } from "eslint/config";
 import stylistic from '@stylistic/eslint-plugin'
 import reactHooks from 'eslint-plugin-react-hooks'
 import reactRefresh from 'eslint-plugin-react-refresh'
+import localRules from "./eslint-rules/no-hardcoded-colors.js";
 
 export default defineConfig([
   {
@@ -42,6 +43,7 @@ export default defineConfig([
     files: ['packages/frontend/src/**/*.{js,jsx,mjs,cjs,ts,tsx}'],
     plugins: {
       pluginReact,
+      local: localRules,
     },
     extends: [
 
@@ -71,21 +73,8 @@ export default defineConfig([
       }
     },
     rules: {
-      'no-restricted-syntax': [
-        'error',
-        {
-          selector: "VariableDeclarator[init.type='CallExpression'][init.callee.name='style']",
-          message: "Inline @react-spectrum/s2 style() calls directly in JSX props instead of assigning them to variables.",
-        },
-        {
-          selector: "VariableDeclarator[init.type='ConditionalExpression'][init.consequent.type='CallExpression'][init.consequent.callee.name='style']",
-          message: "Inline @react-spectrum/s2 style() calls directly in JSX props instead of assigning them to variables.",
-        },
-        {
-          selector: "VariableDeclarator[init.type='ConditionalExpression'][init.alternate.type='CallExpression'][init.alternate.callee.name='style']",
-          message: "Inline @react-spectrum/s2 style() calls directly in JSX props instead of assigning them to variables.",
-        },
-      ],
+      'local/no-hardcoded-colors': 'error',
+      'local/style-macro-inline-object': 'error',
     },
   },
   // frontend tooling/config files run in Node
@@ -95,6 +84,17 @@ export default defineConfig([
       'packages/frontend/vitest.config.ts',
       'packages/frontend/vitest.storybook.workspace.ts',
       'packages/frontend/.storybook/**/*.{js,mjs,cjs,ts,mts,cts,tsx}',
+    ],
+    languageOptions: {
+      globals: {
+        ...globals.node,
+      },
+    },
+  },
+  // repository-level tooling/config files run in Node
+  {
+    files: [
+      '.dependency-cruiser.cjs',
     ],
     languageOptions: {
       globals: {
