@@ -43,6 +43,7 @@ export const HomePage = () => {
         <ButtonGroup>
           <LinkButton href="/authors" variant="accent">Open sample inventory</LinkButton>
           <LinkButton href="/graphql" target="_blank" rel="noreferrer">Open GraphQL playground</LinkButton>
+          <LinkButton href="/storybook/" target="_blank" rel="noreferrer">Open Storybook</LinkButton>
         </ButtonGroup>
       </section>
 

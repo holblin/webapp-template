@@ -11,10 +11,13 @@ import Code from '@react-spectrum/s2/icons/Code';
 import Home from '@react-spectrum/s2/icons/Home';
 import InfoCircle from '@react-spectrum/s2/icons/InfoCircle';
 import OpenIn from '@react-spectrum/s2/icons/OpenIn';
+import App from '@react-spectrum/s2/icons/App';
 import Tag from '@react-spectrum/s2/icons/Tag';
 import UserGroup from '@react-spectrum/s2/icons/UserGroup';
 
 type AppRoute = FileRouteTypes['to']
+const storybookPath = import.meta.env.VITE_STORYBOOK_URL?.trim()
+  || (import.meta.env.DEV ? 'http://localhost:6006/' : '/storybook/');
 
 const menus: ReadonlyArray<{
   path: AppRoute | string;
@@ -26,8 +29,10 @@ const menus: ReadonlyArray<{
   { path: '/authors', name: 'Authors', Icon: UserGroup },
   { path: '/books', name: 'Books', Icon: Bookmark },
   { path: '/tags', name: 'Tags', Icon: Tag },
+  { path: '/uml', name: 'UML', Icon: Code },
   { path: '/about', name: 'About', Icon: InfoCircle },
   { path: '/graphql', name: 'GraphQL', Icon: Code, external: true },
+  { path: storybookPath, name: 'Storybook', Icon: App, external: true },
 ] as const
 
 type NavigationProps = {

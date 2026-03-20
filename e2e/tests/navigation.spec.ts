@@ -1,6 +1,21 @@
 import { expect, test } from '@playwright/test';
 
 test.describe('App Navigation', () => {
+  test('does not continuously reload on home page', async ({ page }) => {
+    let topLevelNavigations = 0;
+    page.on('framenavigated', (frame) => {
+      if (frame === page.mainFrame()) {
+        topLevelNavigations += 1;
+      }
+    });
+
+    await page.goto('/');
+    await page.waitForTimeout(1500);
+
+    expect(topLevelNavigations).toBeLessThanOrEqual(2);
+    await expect(page.getByRole('heading', { name: 'Build production-ready web apps faster' })).toBeVisible();
+  });
+
   test('renders home page', async ({ page }) => {
     await page.goto('/');
 

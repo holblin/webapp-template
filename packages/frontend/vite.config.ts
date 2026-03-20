@@ -30,6 +30,7 @@ export default defineConfig({
     macros.vite(), // Must be first!
     tanstackRouter({
       target: 'react',
+      enableRouteGeneration: false,
       autoCodeSplitting: true,
       generatedRouteTree: './src/__generated__/tanstack/routeTree.gen.ts',
       routeFileIgnorePattern: '(^|/)__test__/|\\.(test|spec)\\.(ts|tsx)$',

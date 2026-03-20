@@ -16,6 +16,7 @@ The app will be available at:
 
 - Frontend: `http://localhost:4000`
 - GraphQL endpoint: `http://localhost:4000/graphql`
+- Storybook: `http://localhost:4000/storybook/`
 
 ## 3) Log in to Docker Hub
 

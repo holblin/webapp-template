@@ -28,7 +28,10 @@ const config: StorybookConfig = {
     disableTelemetry: true,
   },
   async viteFinal(baseConfig) {
+    const storybookBasePath = process.env.STORYBOOK_BASE_PATH ?? '/';
+
     return mergeConfig(baseConfig, {
+      base: storybookBasePath,
       server: {
         hmr: false,
       },

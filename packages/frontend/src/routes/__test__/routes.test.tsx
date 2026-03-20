@@ -28,6 +28,9 @@ vi.mock('src/pages/Homepage/Homepage', () => ({
 vi.mock('src/pages/About/About', () => ({
   About: () => null,
 }));
+vi.mock('src/pages/Uml/UmlPage', () => ({
+  UmlPage: () => null,
+}));
 vi.mock('src/pages/Authors/AuthorsPage', () => ({
   AuthorsPage: () => null,
 }));
@@ -47,6 +50,7 @@ import { Route as AuthorsRoute } from '../authors';
 import { Route as BooksRoute } from '../books';
 import { Route as HomeRoute } from '../index';
 import { Route as TagsRoute } from '../tags';
+import { Route as UmlRoute } from '../uml';
 
 type RouteWithComponent = { component: unknown };
 type RouteWithValidateSearch<TSearch> = { validateSearch: (search: unknown) => TSearch };
@@ -60,9 +64,11 @@ describe('routes', () => {
     expect(routerMocks.createFileRouteMock).toHaveBeenCalledWith('/authors');
     expect(routerMocks.createFileRouteMock).toHaveBeenCalledWith('/books');
     expect(routerMocks.createFileRouteMock).toHaveBeenCalledWith('/tags');
+    expect(routerMocks.createFileRouteMock).toHaveBeenCalledWith('/uml');
     expect((RootRoute as unknown as RouteWithComponent).component).toBeTypeOf('function');
     expect((HomeRoute as unknown as RouteWithComponent).component).toBeTypeOf('function');
     expect((AboutRoute as unknown as RouteWithComponent).component).toBeTypeOf('function');
+    expect((UmlRoute as unknown as RouteWithComponent).component).toBeTypeOf('function');
     expect((RootRoute as unknown as ComponentRoute).component()).toBeTruthy();
   });
 

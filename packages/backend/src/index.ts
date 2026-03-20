@@ -4,9 +4,10 @@ import express from 'express';
 import { ApolloServer } from '@apollo/server';
 import { expressMiddleware } from '@as-integrations/express5';
 import { ApolloServerPluginDrainHttpServer } from '@apollo/server/plugin/drainHttpServer';
+import { ApolloServerPluginLandingPageLocalDefault } from '@apollo/server/plugin/landingPage/default';
 import { randomUUID } from 'node:crypto';
 import { existsSync } from 'node:fs';
-import { join, resolve } from 'node:path';
+import { resolve } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { createAuthorApiClient } from './apiClient/authorApiClient.js';
 import { createBookApiClient } from './apiClient/bookApiClient.js';
@@ -14,6 +15,7 @@ import { createTagApiClient } from './apiClient/tagApiClient.js';
 import type { GraphQLContext } from './context.js';
 import { resolvers, typeDefs } from './graphql/modules/index.js';
 import { createGraphQLLoaders } from './graphql/loaders.js';
+import { registerStaticAssets } from './staticAssets.js';
 
 const app = express();
 
@@ -21,7 +23,11 @@ const httpServer = http.createServer(app);
 const server = new ApolloServer<GraphQLContext>({
   typeDefs,
   resolvers,
-  plugins: [ApolloServerPluginDrainHttpServer({ httpServer })],
+  introspection: true,
+  plugins: [
+    ApolloServerPluginDrainHttpServer({ httpServer }),
+    ApolloServerPluginLandingPageLocalDefault({ embed: true }),
+  ],
 });
 
 await server.start();
@@ -54,21 +60,24 @@ const candidateFrontendDistPaths = [
   // Runtime after local compile from workspace root
   resolve(backendDir, '../../../frontend/dist'),
 ];
+const candidateStorybookDistPaths = [
+  // Runtime in Docker (cwd /app, backend from /app/packages/backend/dist)
+  resolve(backendDir, '../../frontend/dist-storybook'),
+  // Runtime after local compile from workspace root
+  resolve(backendDir, '../../../frontend/dist-storybook'),
+];
 const frontendDistPath = candidateFrontendDistPaths.find((candidatePath) => existsSync(candidatePath));
+const storybookDistPath = candidateStorybookDistPaths.find((candidatePath) => existsSync(candidatePath));
 const allowMissingFrontendDist = process.env.ALLOW_MISSING_FRONTEND_DIST === 'true';
 if (!frontendDistPath && !allowMissingFrontendDist) {
   throw new Error('Frontend dist directory not found. Build the frontend before starting the backend.');
 }
 
 if (frontendDistPath) {
-  app.use(express.static(frontendDistPath));
-  app.use((request, response, next) => {
-    if (request.path.startsWith('/graphql')) {
-      next();
-      return;
-    }
-
-    response.sendFile(join(frontendDistPath, 'index.html'));
+  registerStaticAssets({
+    app,
+    frontendDistPath,
+    storybookDistPath,
   });
 }
 
