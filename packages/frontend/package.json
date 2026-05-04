@@ -27,7 +27,7 @@
     "@react-aria/optimize-locales-plugin": "^1.1.5",
     "@react-spectrum/s2": "^1.2.0",
     "@tanstack/react-router": "^1.167.5",
-    "@xyflow/react": "^12.10.1",
+    "@xyflow/react": "^12.10.2",
     "graphql": "^16.13.1",
     "react": "^19.2.4",
     "react-dom": "^19.2.4",
