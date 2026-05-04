@@ -23,7 +23,7 @@
     "build-storybook": "STORYBOOK_BASE_PATH=/storybook/ storybook build --output-dir dist-storybook"
   },
   "dependencies": {
-    "@apollo/client": "^4.1.6",
+    "@apollo/client": "^4.1.9",
     "@react-aria/optimize-locales-plugin": "^1.1.5",
     "@react-spectrum/s2": "^1.2.0",
     "@tanstack/react-router": "^1.167.5",
