@@ -28,7 +28,7 @@
     "@react-spectrum/s2": "^1.2.0",
     "@tanstack/react-router": "^1.167.5",
     "@xyflow/react": "^12.10.2",
-    "graphql": "^16.13.1",
+    "graphql": "^16.13.2",
     "react": "^19.2.4",
     "react-dom": "^19.2.4",
     "unplugin-parcel-macros": "^0.2.0"
