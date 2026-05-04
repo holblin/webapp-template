@@ -24,7 +24,7 @@
   },
   "dependencies": {
     "@apollo/client": "^4.1.9",
-    "@react-aria/optimize-locales-plugin": "^1.1.5",
+    "@react-aria/optimize-locales-plugin": "^1.2.0",
     "@react-spectrum/s2": "^1.2.0",
     "@tanstack/react-router": "^1.167.5",
     "@xyflow/react": "^12.10.2",
