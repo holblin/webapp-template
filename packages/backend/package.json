@@ -19,7 +19,7 @@
     "start": "npm run compile && node ./dist/index.js"
   },
   "dependencies": {
-    "@apollo/server": "^5.4.0",
+    "@apollo/server": "^5.5.0",
     "@as-integrations/express5": "^1.1.2",
     "cors": "^2.8.6",
     "dataloader": "^2.2.3",
