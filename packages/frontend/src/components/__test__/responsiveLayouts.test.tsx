@@ -73,6 +73,7 @@ vi.mock('@react-spectrum/s2', () => {
     TabList: component('div'),
     Tab: component('div'),
     Cell: component('td'),
+    EditableCell: component('td'),
     SearchField: component('input'),
     TableView: component('table'),
     TableHeader: component('thead'),

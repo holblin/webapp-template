@@ -90,6 +90,7 @@ vi.mock('@react-spectrum/s2', () => {
     TabList: component('div'),
     Tab: component('div'),
     Cell: component('td'),
+    EditableCell: component('td'),
     SearchField: component('input', (props) => {
       const onChange = props.onChange as ((value: string) => void) | undefined;
       onChange?.('query');

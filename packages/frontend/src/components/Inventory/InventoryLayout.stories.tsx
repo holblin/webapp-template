@@ -5,11 +5,11 @@ import {
 } from '@react-spectrum/s2';
 import type { Meta, StoryObj } from '@storybook/react-vite';
 import { useMemo, useState } from 'react';
-import {
-  InventoryLayout,
-  type InventoryLayoutColumn,
-  type InventoryLayoutState,
-} from 'src/components/Inventory/InventoryLayout';
+import { InventoryLayout } from 'src/components/Inventory/InventoryLayout';
+import type {
+  InventoryLayoutColumn,
+  InventoryLayoutState,
+} from 'src/components/Inventory/InventoryLayout.types';
 import { SortDirection } from 'src/__generated__/gql/graphql';
 import {
   applyInventorySortPatch,

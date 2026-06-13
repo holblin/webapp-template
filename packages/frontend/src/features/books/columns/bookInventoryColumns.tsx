@@ -1,5 +1,5 @@
 import { BookListSortBy, type BookInventoryRowFragmentFragment } from 'src/__generated__/gql/graphql';
-import type { InventoryLayoutColumn } from 'src/components/Inventory/InventoryLayout';
+import type { InventoryLayoutColumn } from 'src/components/Inventory/InventoryLayout.types';
 import { BookActionsCell } from 'src/features/books/fragments/BookActionsCell/BookActionsCell';
 import { BookAuthorCell } from 'src/features/books/fragments/BookAuthorCell/BookAuthorCell';
 import { BookDescriptionCell } from 'src/features/books/fragments/BookDescriptionCell/BookDescriptionCell';

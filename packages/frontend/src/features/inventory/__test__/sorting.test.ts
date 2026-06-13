@@ -1,6 +1,6 @@
 import { describe, expect, it, vi } from 'vitest';
 import { SortDirection } from 'src/__generated__/gql/graphql';
-import type { InventoryLayoutColumn } from 'src/components/Inventory/InventoryLayout';
+import type { InventoryLayoutColumn } from 'src/components/Inventory/InventoryLayout.types';
 import { applyInventorySortPatch, buildTableSortDescriptor } from '../sorting';
 
 type SortBy = 'id' | 'name';

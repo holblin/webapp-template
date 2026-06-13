@@ -3,11 +3,11 @@ import {
   Button,
   ButtonGroup,
   Cell,
-  Column,
   Content,
   Dialog,
   DialogContainer,
   Divider,
+  EditableCell,
   Heading,
   Row,
   SearchField,
@@ -17,54 +17,17 @@ import {
   type SortDescriptor,
 } from '@react-spectrum/s2';
 import { style } from '@react-spectrum/s2/style' with { type: 'macro' };
-import type { ComponentProps, ReactNode } from 'react';
+import { cloneElement, isValidElement } from 'react';
+import type { ReactNode } from 'react';
 import { useState } from 'react';
 import { useIsSmallViewport } from 'src/components/Responsive/useIsSmallViewport';
-
-export type InventoryLayoutColumn<TRow extends object> = {
-  id: string;
-  header: ReactNode;
-  isRowHeader?: boolean;
-  allowsSorting?: boolean;
-  sortField?: string;
-  allowsResizing?: boolean;
-  minWidth?: ComponentProps<typeof Column>['minWidth'];
-  renderCell: (row: TRow) => ReactNode;
-};
-
-export type InventoryLayoutState = {
-  offset: number;
-  search: string;
-  showFilters: boolean;
-};
-
-export type InventoryLayoutProps<TRow extends object, TState extends InventoryLayoutState, TFilters extends Record<string, unknown>> = {
-  title: string;
-  totalCount: number;
-  state: TState;
-  onStateChange: (nextState: TState) => void;
-  topRight?: ReactNode;
-  columns: InventoryLayoutColumn<TRow>[];
-  rows: TRow[];
-  getRowId: (row: TRow) => string;
-  ariaLabel: string;
-  getFilters: (state: TState) => TFilters;
-  getActiveFilters?: (state: TState, filters: TFilters) => Array<{
-    id: string;
-    label: string;
-    patch: Partial<TState>;
-  }>;
-  clearFiltersPatch?: Partial<TState>;
-  renderFilterPanel: (filters: TFilters, onFiltersChange: (patch: Partial<TFilters>) => void) => ReactNode;
-  loadingState?: 'loading' | 'loadingMore' | 'sorting' | 'filtering' | 'idle';
-  onLoadMore?: () => void;
-  sortDescriptor?: SortDescriptor;
-  onSortChange?: (
-    descriptor: SortDescriptor,
-    column: InventoryLayoutColumn<TRow> | undefined,
-    onStatePatch: (patch: Partial<TState>, resetOffset?: boolean) => void,
-  ) => void;
-};
+import { CellText } from 'src/components/Table/CellText';
+import { ResizableColumn } from 'src/components/Table/ResizableColumn';
+import type {
+  InventoryLayoutColumn,
+  InventoryLayoutProps,
+  InventoryLayoutState,
+} from './InventoryLayout.types';
 
 type InventoryStatePatchFn<TState extends InventoryLayoutState> = (patch: Partial<TState>, resetOffset?: boolean) => void;
 
@@ -130,24 +93,42 @@ const InventoryTable = <TRow extends object, TState extends InventoryLayoutState
         >
           <TableHeader>
             {columns.map((column) => (
-              <Column
+              <ResizableColumn
                 key={column.id}
                 id={column.id}
                 isRowHeader={column.isRowHeader}
                 allowsSorting={column.allowsSorting ?? Boolean(column.sortField)}
                 allowsResizing={column.allowsResizing ?? true}
+                width={column.width}
+                defaultWidth={column.defaultWidth}
                 minWidth={column.minWidth}
+                maxWidth={column.maxWidth}
               >
                 {column.header}
-              </Column>
+              </ResizableColumn>
             ))}
           </TableHeader>
           <TableBody items={rows}>
             {(row) => (
               <Row id={getRowId(row)}>
-                {columns.map((column) => (
-                  <Cell key={column.id}>{column.renderCell(row)}</Cell>
-                ))}
+                {columns.map((column) => {
+                  const renderedCell = column.renderCell(row);
+                  const renderedCellType = isValidElement(renderedCell)
+                    ? (renderedCell.type as { isInventoryTableCell?: boolean })
+                    : null;
+                  if (
+                    isValidElement(renderedCell)
+                    && (
+                      renderedCell.type === Cell
+                      || renderedCell.type === CellText
+                      || renderedCell.type === EditableCell
+                      || renderedCellType?.isInventoryTableCell === true
+                    )
+                  ) {
+                    return cloneElement(renderedCell, { key: column.id });
+                  }
+                  return <Cell key={column.id}>{renderedCell}</Cell>;
+                })}
               </Row>
             )}
           </TableBody>

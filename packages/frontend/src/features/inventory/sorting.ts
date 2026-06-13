@@ -1,6 +1,6 @@
 import type { SortDescriptor } from '@react-spectrum/s2';
 import { SortDirection } from 'src/__generated__/gql/graphql';
-import type { InventoryLayoutColumn } from 'src/components/Inventory/InventoryLayout';
+import type { InventoryLayoutColumn } from 'src/components/Inventory/InventoryLayout.types';
 
 type SortByState<TSortBy extends string> = {
   sortBy: TSortBy;

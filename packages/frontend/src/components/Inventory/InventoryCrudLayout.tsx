@@ -5,12 +5,12 @@ import {
 import type { ReactNode } from 'react';
 import { useMemo } from 'react';
 import { useCrudDialogState } from 'src/features/inventory/hooks/useCrudDialogState';
-import {
-  InventoryLayout,
-  type InventoryLayoutColumn,
-  type InventoryLayoutProps,
-  type InventoryLayoutState,
-} from './InventoryLayout';
+import { InventoryLayout } from './InventoryLayout';
+import type {
+  InventoryLayoutColumn,
+  InventoryLayoutProps,
+  InventoryLayoutState,
+} from './InventoryLayout.types';
 
 type InventoryCrudLayoutProps<
   TRow extends object,

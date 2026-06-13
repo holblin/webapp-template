@@ -11,7 +11,7 @@ import {
 import type { Meta, StoryObj } from '@storybook/react-vite';
 import { useMemo, useState } from 'react';
 import { InventoryCrudLayout } from 'src/components/Inventory/InventoryCrudLayout';
-import type { InventoryLayoutState } from 'src/components/Inventory/InventoryLayout';
+import type { InventoryLayoutState } from 'src/components/Inventory/InventoryLayout.types';
 import { SortDirection } from 'src/__generated__/gql/graphql';
 import {
   applyInventorySortPatch,

@@ -1,5 +1,5 @@
 import { AuthorListSortBy, type AuthorInventoryRowFragmentFragment } from 'src/__generated__/gql/graphql';
-import type { InventoryLayoutColumn } from 'src/components/Inventory/InventoryLayout';
+import type { InventoryLayoutColumn } from 'src/components/Inventory/InventoryLayout.types';
 import { AuthorActionsCell } from 'src/features/authors/fragments/AuthorActionsCell/AuthorActionsCell';
 import { AuthorBioCell } from 'src/features/authors/fragments/AuthorBioCell/AuthorBioCell';
 import { AuthorBirthDateCell } from 'src/features/authors/fragments/AuthorBirthDateCell/AuthorBirthDateCell';

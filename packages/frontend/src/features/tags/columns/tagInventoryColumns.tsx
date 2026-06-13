@@ -1,5 +1,5 @@
 import { TagListSortBy, type TagInventoryRowFragmentFragment } from 'src/__generated__/gql/graphql';
-import type { InventoryLayoutColumn } from 'src/components/Inventory/InventoryLayout';
+import type { InventoryLayoutColumn } from 'src/components/Inventory/InventoryLayout.types';
 import { TagActionsCell } from 'src/features/tags/fragments/TagActionsCell/TagActionsCell';
 import { TagBooksCell } from 'src/features/tags/fragments/TagBooksCell/TagBooksCell';
 import { TagBooksCountCell } from 'src/features/tags/fragments/TagBooksCountCell/TagBooksCountCell';

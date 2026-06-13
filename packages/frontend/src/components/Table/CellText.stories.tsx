@@ -1,5 +1,4 @@
 import {
-  Column,
   Row,
   TableBody,
   TableHeader,
@@ -7,6 +6,7 @@ import {
 } from '@react-spectrum/s2';
 import type { Meta, StoryObj } from '@storybook/react-vite';
 import { CellText } from 'src/components/Table/CellText';
+import { ResizableColumn } from 'src/components/Table/ResizableColumn';
 
 type DemoRow = {
   id: string;
@@ -25,9 +25,9 @@ const meta = {
     <div style={{ height: 260 }}>
       <TableView aria-label="CellText demo">
         <TableHeader>
-          <Column id="value" isRowHeader>
+          <ResizableColumn id="value" isRowHeader>
             Value
-          </Column>
+          </ResizableColumn>
         </TableHeader>
         <TableBody items={rows}>
           {(row) => (
